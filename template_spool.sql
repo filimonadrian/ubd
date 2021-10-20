@@ -1,15 +1,20 @@
 -- template spool
 
 
-spool c:\users\adrian\documents\ubd\spool_ubd\spool_ubd_lab2_12oct2021
+spool c:\users\adrian\documents\ubd\spool_ubd\spool_ubd_lab3_20oct2021
 set lines 200
 set pages 100
+
+set linesize 100
+column <numele_coloanei> format a30
+
+
 select to_char(sysdate, ’dd-mm-yyyy hh:mi:ss’) from dual;
 
 --- incepe sesiune
-insert into login_lab_ubd values( 'Filimon Adrian', '342C2', 'Lab2', user, sysdate, null, null);
+insert into login_lab_ubd values( 'Filimon Adrian', '342C2', 'Lab3', user, sysdate, null, null);
 
-
+-- format
 -- sfarsit de laborator
 
 update login_lab_ubd set data_sf= sysdate where laborator='Lab2';
