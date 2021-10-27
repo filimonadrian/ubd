@@ -1,0 +1,986 @@
+SQL> set lines 200
+SQL> set pages 100
+SQL> 
+SQL> set linesize 100
+SQL> column <numele_coloanei> format a30
+SQL> 
+SQL> 
+SQL> select to_char(sysdate, 'dd-mm-yyyy hh:mi:ss') from dual;
+
+TO_CHAR(SYSDATE,'DD                                                                                 
+-------------------                                                                                 
+27-10-2021 07:24:44                                                                                 
+
+SQL> 
+SQL> --- incepe sesiune
+SQL> insert into login_lab_ubd values( 'Filimon Adrian', '342C2', 'Lab4', user, sysdate, null, null);
+
+1 row created.
+
+SQL> select * from logic_lab_ubd;
+select * from logic_lab_ubd
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> select * from login_lab_ubd;
+
+NUME_STUD                      GRUPA      LABORATOR  NUME_USER  DATA_IN   DATA_SF       DURATA      
+------------------------------ ---------- ---------- ---------- --------- --------- ----------      
+Filimon Adrian                 342C2      Lab4       ABD1       27-OCT-21                           
+Filimon Adrian                 342C2      Lab3       ABD1       20-OCT-21                           
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> desc v$controlfile
+ Name                                                  Null?    Type
+ ----------------------------------------------------- -------- ------------------------------------
+ STATUS                                                         VARCHAR2(7)
+ NAME                                                           VARCHAR2(513)
+ IS_RECOVERY_DEST_FILE                                          VARCHAR2(3)
+ BLOCK_SIZE                                                     NUMBER
+ FILE_SIZE_BLKS                                                 NUMBER
+ CON_ID                                                         NUMBER
+
+SQL> select name,block_size, file_size_blks from v$controlfile;
+
+NAME                                                                                                
+----------------------------------------------------------------------------------------------------
+BLOCK_SIZE FILE_SIZE_BLKS                                                                           
+---------- --------------                                                                           
+D:\ORACLE_19C\ORADATA\ORCL\CONTROLFILE\O1_MF_JPZD6HMV_.CTL                                          
+     16384            646                                                                           
+                                                                                                    
+D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\CONTROLFILE\O1_MF_JPZD6HN9_.CTL                               
+     16384            646                                                                           
+                                                                                                    
+
+SQL> column name format a30
+SQL> select name,block_size, file_size_blks from v$controlfile;
+
+NAME                           BLOCK_SIZE FILE_SIZE_BLKS                                            
+------------------------------ ---------- --------------                                            
+D:\ORACLE_19C\ORADATA\ORCL\CON      16384            646                                            
+TROLFILE\O1_MF_JPZD6HMV_.CTL                                                                        
+                                                                                                    
+D:\ORACLE_19C\FAST_RECOVERY_AR      16384            646                                            
+EA\ORCL\CONTROLFILE\O1_MF_JPZD                                                                      
+6HN9_.CTL                                                                                           
+                                                                                                    
+
+SQL> desc v$parameter
+ Name                                                  Null?    Type
+ ----------------------------------------------------- -------- ------------------------------------
+ NUM                                                            NUMBER
+ NAME                                                           VARCHAR2(80)
+ TYPE                                                           NUMBER
+ VALUE                                                          VARCHAR2(4000)
+ DISPLAY_VALUE                                                  VARCHAR2(4000)
+ DEFAULT_VALUE                                                  VARCHAR2(255)
+ ISDEFAULT                                                      VARCHAR2(9)
+ ISSES_MODIFIABLE                                               VARCHAR2(5)
+ ISSYS_MODIFIABLE                                               VARCHAR2(9)
+ ISPDB_MODIFIABLE                                               VARCHAR2(5)
+ ISINSTANCE_MODIFIABLE                                          VARCHAR2(5)
+ ISMODIFIED                                                     VARCHAR2(10)
+ ISADJUSTED                                                     VARCHAR2(5)
+ ISDEPRECATED                                                   VARCHAR2(5)
+ ISBASIC                                                        VARCHAR2(5)
+ DESCRIPTION                                                    VARCHAR2(255)
+ UPDATE_COMMENT                                                 VARCHAR2(255)
+ HASH                                                           NUMBER
+ CON_ID                                                         NUMBER
+
+SQL> select name, type, value from v$parameter where name='control_files';
+
+NAME                                 TYPE                                                           
+------------------------------ ----------                                                           
+VALUE                                                                                               
+----------------------------------------------------------------------------------------------------
+control_files                           2                                                           
+D:\ORACLE_19C\ORADATA\ORCL\CONTROLFILE\O1_MF_JPZD6HMV_.CTL, D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\CO
+NTROLFILE\O1_MF_JPZD6HN9_.CTL                                                                       
+                                                                                                    
+
+SQL> column value format a40
+SQL> select name, type, value from v$parameter where name='control_files';
+
+NAME                                 TYPE VALUE                                                     
+------------------------------ ---------- ----------------------------------------                  
+control_files                           2 D:\ORACLE_19C\ORADATA\ORCL\CONTROLFILE\O                  
+                                          1_MF_JPZD6HMV_.CTL, D:\ORACLE_19C\FAST_R                  
+                                          ECOVERY_AREA\ORCL\CONTROLFILE\O1_MF_JPZD                  
+                                          6HN9_.CTL                                                 
+                                                                                                    
+
+SQL> desc v$controlfile_record_section
+ Name                                                  Null?    Type
+ ----------------------------------------------------- -------- ------------------------------------
+ TYPE                                                           VARCHAR2(28)
+ RECORD_SIZE                                                    NUMBER
+ RECORDS_TOTAL                                                  NUMBER
+ RECORDS_USED                                                   NUMBER
+ FIRST_INDEX                                                    NUMBER
+ LAST_INDEX                                                     NUMBER
+ LAST_RECID                                                     NUMBER
+ CON_ID                                                         NUMBER
+
+SQL> select * from v$controlfile_record_section;
+
+TYPE                         RECORD_SIZE RECORDS_TOTAL RECORDS_USED FIRST_INDEX LAST_INDEX          
+---------------------------- ----------- ------------- ------------ ----------- ----------          
+LAST_RECID     CON_ID                                                                               
+---------- ----------                                                                               
+DATABASE                             316             1            1           0          0          
+         0          0                                                                               
+                                                                                                    
+CKPT PROGRESS                       8180            11            0           0          0          
+         0          0                                                                               
+                                                                                                    
+REDO THREAD                          256             8            1           0          0          
+         0          0                                                                               
+                                                                                                    
+REDO LOG                              72            16            3           0          0          
+        15          0                                                                               
+                                                                                                    
+DATAFILE                             520           100            7           0          0          
+         5          0                                                                               
+                                                                                                    
+FILENAME                             524          2298           13           0          0          
+         0          0                                                                               
+                                                                                                    
+TABLESPACE                           180           100            7           0          0          
+         3          0                                                                               
+                                                                                                    
+TEMPORARY FILENAME                    56           100            2           0          0          
+         2          0                                                                               
+                                                                                                    
+RMAN CONFIGURATION                  1108            50            0           0          0          
+         0          0                                                                               
+                                                                                                    
+LOG HISTORY                           56           292            7           1          7          
+         7          0                                                                               
+                                                                                                    
+OFFLINE RANGE                        200           163            0           0          0          
+         0          0                                                                               
+                                                                                                    
+ARCHIVED LOG                         584            28            0           0          0          
+         0          0                                                                               
+                                                                                                    
+BACKUP SET                            96           170            0           0          0          
+         0          0                                                                               
+                                                                                                    
+BACKUP PIECE                         780           209            0           0          0          
+         0          0                                                                               
+                                                                                                    
+BACKUP DATAFILE                      200           245            0           0          0          
+         0          0                                                                               
+                                                                                                    
+BACKUP REDOLOG                        76           215            0           0          0          
+         0          0                                                                               
+                                                                                                    
+DATAFILE COPY                        736           200            0           0          0          
+         0          0                                                                               
+                                                                                                    
+BACKUP CORRUPTION                     44           371            0           0          0          
+         0          0                                                                               
+                                                                                                    
+COPY CORRUPTION                       40           409            0           0          0          
+         0          0                                                                               
+                                                                                                    
+DELETED OBJECT                        20           818            0           0          0          
+         0          0                                                                               
+                                                                                                    
+PROXY COPY                           928           246            0           0          0          
+         0          0                                                                               
+                                                                                                    
+BACKUP SPFILE                        124           131            0           0          0          
+         0          0                                                                               
+                                                                                                    
+DATABASE INCARNATION                  56           292            2           1          2          
+         2          0                                                                               
+                                                                                                    
+FLASHBACK LOG                         84          2048            0           0          0          
+         0          0                                                                               
+                                                                                                    
+RECOVERY DESTINATION                 180             1            1           0          0          
+         0          0                                                                               
+                                                                                                    
+INSTANCE SPACE RESERVATION            28          1055            1           0          0          
+         0          0                                                                               
+                                                                                                    
+REMOVABLE RECOVERY FILES              32          1000            0           0          0          
+         0          0                                                                               
+                                                                                                    
+RMAN STATUS                          116           141            0           0          0          
+         0          0                                                                               
+                                                                                                    
+THREAD INSTANCE NAME MAPPING          80             8            8           0          0          
+         0          0                                                                               
+                                                                                                    
+MTTR                                 100             8            1           0          0          
+         0          0                                                                               
+                                                                                                    
+DATAFILE HISTORY                     568            57            0           0          0          
+         0          0                                                                               
+                                                                                                    
+STANDBY DATABASE MATRIX              400           128          128           0          0          
+         0          0                                                                               
+
+TYPE                         RECORD_SIZE RECORDS_TOTAL RECORDS_USED FIRST_INDEX LAST_INDEX          
+---------------------------- ----------- ------------- ------------ ----------- ----------          
+LAST_RECID     CON_ID                                                                               
+---------- ----------                                                                               
+                                                                                                    
+GUARANTEED RESTORE POINT             256          2048            0           0          0          
+         0          0                                                                               
+                                                                                                    
+RESTORE POINT                        256          2108            0           0          0          
+         0          0                                                                               
+                                                                                                    
+DATABASE BLOCK CORRUPTION             80          8384            0           0          0          
+         0          0                                                                               
+                                                                                                    
+ACM OPERATION                        104            64           11           0          0          
+         0          0                                                                               
+                                                                                                    
+FOREIGN ARCHIVED LOG                 604          1002            0           0          0          
+         0          0                                                                               
+                                                                                                    
+PDB RECORD                           780            10            0           0          0          
+         0          0                                                                               
+                                                                                                    
+AUXILIARY DATAFILE COPY              584           128            0           0          0          
+         0          0                                                                               
+                                                                                                    
+MULTI INSTANCE REDO APPLY            556             1            0           0          0          
+         0          0                                                                               
+                                                                                                    
+PDBINC RECORD                        144           113            0           0          0          
+         0          0                                                                               
+                                                                                                    
+TABLESPACE KEY HISTORY               108           151            0           0          0          
+         0          0                                                                               
+                                                                                                    
+
+42 rows selected.
+
+SQL> set linesize 150
+SQL> select * from v$controlfile_record_section;
+
+TYPE                         RECORD_SIZE RECORDS_TOTAL RECORDS_USED FIRST_INDEX LAST_INDEX LAST_RECID     CON_ID                                      
+---------------------------- ----------- ------------- ------------ ----------- ---------- ---------- ----------                                      
+DATABASE                             316             1            1           0          0          0          0                                      
+CKPT PROGRESS                       8180            11            0           0          0          0          0                                      
+REDO THREAD                          256             8            1           0          0          0          0                                      
+REDO LOG                              72            16            3           0          0         15          0                                      
+DATAFILE                             520           100            7           0          0          5          0                                      
+FILENAME                             524          2298           13           0          0          0          0                                      
+TABLESPACE                           180           100            7           0          0          3          0                                      
+TEMPORARY FILENAME                    56           100            2           0          0          2          0                                      
+RMAN CONFIGURATION                  1108            50            0           0          0          0          0                                      
+LOG HISTORY                           56           292            7           1          7          7          0                                      
+OFFLINE RANGE                        200           163            0           0          0          0          0                                      
+ARCHIVED LOG                         584            28            0           0          0          0          0                                      
+BACKUP SET                            96           170            0           0          0          0          0                                      
+BACKUP PIECE                         780           209            0           0          0          0          0                                      
+BACKUP DATAFILE                      200           245            0           0          0          0          0                                      
+BACKUP REDOLOG                        76           215            0           0          0          0          0                                      
+DATAFILE COPY                        736           200            0           0          0          0          0                                      
+BACKUP CORRUPTION                     44           371            0           0          0          0          0                                      
+COPY CORRUPTION                       40           409            0           0          0          0          0                                      
+DELETED OBJECT                        20           818            0           0          0          0          0                                      
+PROXY COPY                           928           246            0           0          0          0          0                                      
+BACKUP SPFILE                        124           131            0           0          0          0          0                                      
+DATABASE INCARNATION                  56           292            2           1          2          2          0                                      
+FLASHBACK LOG                         84          2048            0           0          0          0          0                                      
+RECOVERY DESTINATION                 180             1            1           0          0          0          0                                      
+INSTANCE SPACE RESERVATION            28          1055            1           0          0          0          0                                      
+REMOVABLE RECOVERY FILES              32          1000            0           0          0          0          0                                      
+RMAN STATUS                          116           141            0           0          0          0          0                                      
+THREAD INSTANCE NAME MAPPING          80             8            8           0          0          0          0                                      
+MTTR                                 100             8            1           0          0          0          0                                      
+DATAFILE HISTORY                     568            57            0           0          0          0          0                                      
+STANDBY DATABASE MATRIX              400           128          128           0          0          0          0                                      
+GUARANTEED RESTORE POINT             256          2048            0           0          0          0          0                                      
+RESTORE POINT                        256          2108            0           0          0          0          0                                      
+DATABASE BLOCK CORRUPTION             80          8384            0           0          0          0          0                                      
+ACM OPERATION                        104            64           11           0          0          0          0                                      
+FOREIGN ARCHIVED LOG                 604          1002            0           0          0          0          0                                      
+PDB RECORD                           780            10            0           0          0          0          0                                      
+AUXILIARY DATAFILE COPY              584           128            0           0          0          0          0                                      
+MULTI INSTANCE REDO APPLY            556             1            0           0          0          0          0                                      
+PDBINC RECORD                        144           113            0           0          0          0          0                                      
+TABLESPACE KEY HISTORY               108           151            0           0          0          0          0                                      
+
+42 rows selected.
+
+SQL> desc v$controlfile_record_section
+ Name                                                                                Null?    Type
+ ----------------------------------------------------------------------------------- -------- --------------------------------------------------------
+ TYPE                                                                                         VARCHAR2(28)
+ RECORD_SIZE                                                                                  NUMBER
+ RECORDS_TOTAL                                                                                NUMBER
+ RECORDS_USED                                                                                 NUMBER
+ FIRST_INDEX                                                                                  NUMBER
+ LAST_INDEX                                                                                   NUMBER
+ LAST_RECID                                                                                   NUMBER
+ CON_ID                                                                                       NUMBER
+
+SQL> select * from v$controlfile_record_section;
+
+TYPE                         RECORD_SIZE RECORDS_TOTAL RECORDS_USED FIRST_INDEX LAST_INDEX LAST_RECID     CON_ID                                      
+---------------------------- ----------- ------------- ------------ ----------- ---------- ---------- ----------                                      
+DATABASE                             316             1            1           0          0          0          0                                      
+CKPT PROGRESS                       8180            11            0           0          0          0          0                                      
+REDO THREAD                          256             8            1           0          0          0          0                                      
+REDO LOG                              72            16            3           0          0         15          0                                      
+DATAFILE                             520           100            7           0          0          5          0                                      
+FILENAME                             524          2298           13           0          0          0          0                                      
+TABLESPACE                           180           100            7           0          0          3          0                                      
+TEMPORARY FILENAME                    56           100            2           0          0          2          0                                      
+RMAN CONFIGURATION                  1108            50            0           0          0          0          0                                      
+LOG HISTORY                           56           292            7           1          7          7          0                                      
+OFFLINE RANGE                        200           163            0           0          0          0          0                                      
+ARCHIVED LOG                         584            28            0           0          0          0          0                                      
+BACKUP SET                            96           170            0           0          0          0          0                                      
+BACKUP PIECE                         780           209            0           0          0          0          0                                      
+BACKUP DATAFILE                      200           245            0           0          0          0          0                                      
+BACKUP REDOLOG                        76           215            0           0          0          0          0                                      
+DATAFILE COPY                        736           200            0           0          0          0          0                                      
+BACKUP CORRUPTION                     44           371            0           0          0          0          0                                      
+COPY CORRUPTION                       40           409            0           0          0          0          0                                      
+DELETED OBJECT                        20           818            0           0          0          0          0                                      
+PROXY COPY                           928           246            0           0          0          0          0                                      
+BACKUP SPFILE                        124           131            0           0          0          0          0                                      
+DATABASE INCARNATION                  56           292            2           1          2          2          0                                      
+FLASHBACK LOG                         84          2048            0           0          0          0          0                                      
+RECOVERY DESTINATION                 180             1            1           0          0          0          0                                      
+INSTANCE SPACE RESERVATION            28          1055            1           0          0          0          0                                      
+REMOVABLE RECOVERY FILES              32          1000            0           0          0          0          0                                      
+RMAN STATUS                          116           141            0           0          0          0          0                                      
+THREAD INSTANCE NAME MAPPING          80             8            8           0          0          0          0                                      
+MTTR                                 100             8            1           0          0          0          0                                      
+DATAFILE HISTORY                     568            57            0           0          0          0          0                                      
+STANDBY DATABASE MATRIX              400           128          128           0          0          0          0                                      
+GUARANTEED RESTORE POINT             256          2048            0           0          0          0          0                                      
+RESTORE POINT                        256          2108            0           0          0          0          0                                      
+DATABASE BLOCK CORRUPTION             80          8384            0           0          0          0          0                                      
+ACM OPERATION                        104            64           11           0          0          0          0                                      
+FOREIGN ARCHIVED LOG                 604          1002            0           0          0          0          0                                      
+PDB RECORD                           780            10            0           0          0          0          0                                      
+AUXILIARY DATAFILE COPY              584           128            0           0          0          0          0                                      
+MULTI INSTANCE REDO APPLY            556             1            0           0          0          0          0                                      
+PDBINC RECORD                        144           113            0           0          0          0          0                                      
+TABLESPACE KEY HISTORY               108           151            0           0          0          0          0                                      
+
+42 rows selected.
+
+SQL> show PARAMETER CONTROL_FILES
+
+NAME                                 TYPE        VALUE                                                                                                
+------------------------------------ ----------- ------------------------------                                                                       
+control_files                        string      D:\ORACLE_19C\ORADATA\ORCL\CON                                                                       
+                                                 TROLFILE\O1_MF_JPZD6HMV_.CTL,                                                                        
+                                                 D:\ORACLE_19C\FAST_RECOVERY_AR                                                                       
+                                                 EA\ORCL\CONTROLFILE\O1_MF_JPZD                                                                       
+                                                 6HN9_.CTL                                                                                            
+SQL> desc v$tempfile
+ Name                                                                                Null?    Type
+ ----------------------------------------------------------------------------------- -------- --------------------------------------------------------
+ FILE#                                                                                        NUMBER
+ CREATION_CHANGE#                                                                             NUMBER
+ CREATION_TIME                                                                                DATE
+ TS#                                                                                          NUMBER
+ RFILE#                                                                                       NUMBER
+ STATUS                                                                                       VARCHAR2(7)
+ ENABLED                                                                                      VARCHAR2(10)
+ BYTES                                                                                        NUMBER
+ BLOCKS                                                                                       NUMBER
+ CREATE_BYTES                                                                                 NUMBER
+ BLOCK_SIZE                                                                                   NUMBER
+ NAME                                                                                         VARCHAR2(513)
+ CON_ID                                                                                       NUMBER
+
+SQL> select * from v$tempfile;
+
+     FILE# CREATION_CHANGE# CREATION_        TS#     RFILE# STATUS  ENABLED         BYTES     BLOCKS CREATE_BYTES BLOCK_SIZE                          
+---------- ---------------- --------- ---------- ---------- ------- ---------- ---------- ---------- ------------ ----------                          
+NAME                               CON_ID                                                                                                             
+------------------------------ ----------                                                                                                             
+         1          1929012 20-OCT-21          3          1 ONLINE  READ WRITE  137363456      16768     20971520       8192                          
+D:\ORACLE_19C\ORADATA\ORCL\DAT          0                                                                                                             
+AFILE\O1_MF_TEMP_JPZD6RT7_.TMP                                                                                                                        
+                                                                                                                                                      
+         2          1954250 20-OCT-21          7          1 ONLINE  READ WRITE   10485760       1280     10485760       8192                          
+D:\ORACLE_19C\ORADATA\BD_TEMP.          0                                                                                                             
+DBF                                                                                                                                                   
+                                                                                                                                                      
+
+SQL> set linesize 250
+SQL> select * from v$tempfile;
+
+     FILE# CREATION_CHANGE# CREATION_        TS#     RFILE# STATUS  ENABLED         BYTES     BLOCKS CREATE_BYTES BLOCK_SIZE NAME                               CON_ID                                                                                    
+---------- ---------------- --------- ---------- ---------- ------- ---------- ---------- ---------- ------------ ---------- ------------------------------ ----------                                                                                    
+         1          1929012 20-OCT-21          3          1 ONLINE  READ WRITE  137363456      16768     20971520       8192 D:\ORACLE_19C\ORADATA\ORCL\DAT          0                                                                                    
+                                                                                                                             AFILE\O1_MF_TEMP_JPZD6RT7_.TMP                                                                                               
+                                                                                                                                                                                                                                                          
+         2          1954250 20-OCT-21          7          1 ONLINE  READ WRITE   10485760       1280     10485760       8192 D:\ORACLE_19C\ORADATA\BD_TEMP.          0                                                                                    
+                                                                                                                             DBF                                                                                                                          
+                                                                                                                                                                                                                                                          
+
+SQL> desc v$tablespace
+ Name                                                                                                                                            Null?    Type
+ ----------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------
+ TS#                                                                                                                                                      NUMBER
+ NAME                                                                                                                                                     VARCHAR2(30)
+ INCLUDED_IN_DATABASE_BACKUP                                                                                                                              VARCHAR2(3)
+ BIGFILE                                                                                                                                                  VARCHAR2(3)
+ FLASHBACK_ON                                                                                                                                             VARCHAR2(3)
+ ENCRYPT_IN_BACKUP                                                                                                                                        VARCHAR2(3)
+ CON_ID                                                                                                                                                   NUMBER
+
+SQL> select ts#, name, included_in_database_backup from v$tablespace;
+
+       TS# NAME                           INC                                                                                                                                                                                                             
+---------- ------------------------------ ---                                                                                                                                                                                                             
+         1 SYSAUX                         YES                                                                                                                                                                                                             
+         0 SYSTEM                         YES                                                                                                                                                                                                             
+         2 UNDOTBS1                       YES                                                                                                                                                                                                             
+         4 USERS                          YES                                                                                                                                                                                                             
+         3 TEMP                           NO                                                                                                                                                                                                              
+         6 BD_DATA                        YES                                                                                                                                                                                                             
+         7 BD_TEMP                        NO                                                                                                                                                                                                              
+
+7 rows selected.
+
+SQL> desc v$database
+ Name                                                                                                                                            Null?    Type
+ ----------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------
+ DBID                                                                                                                                                     NUMBER
+ NAME                                                                                                                                                     VARCHAR2(9)
+ CREATED                                                                                                                                                  DATE
+ RESETLOGS_CHANGE#                                                                                                                                        NUMBER
+ RESETLOGS_TIME                                                                                                                                           DATE
+ PRIOR_RESETLOGS_CHANGE#                                                                                                                                  NUMBER
+ PRIOR_RESETLOGS_TIME                                                                                                                                     DATE
+ LOG_MODE                                                                                                                                                 VARCHAR2(12)
+ CHECKPOINT_CHANGE#                                                                                                                                       NUMBER
+ ARCHIVE_CHANGE#                                                                                                                                          NUMBER
+ CONTROLFILE_TYPE                                                                                                                                         VARCHAR2(7)
+ CONTROLFILE_CREATED                                                                                                                                      DATE
+ CONTROLFILE_SEQUENCE#                                                                                                                                    NUMBER
+ CONTROLFILE_CHANGE#                                                                                                                                      NUMBER
+ CONTROLFILE_TIME                                                                                                                                         DATE
+ OPEN_RESETLOGS                                                                                                                                           VARCHAR2(11)
+ VERSION_TIME                                                                                                                                             DATE
+ OPEN_MODE                                                                                                                                                VARCHAR2(20)
+ PROTECTION_MODE                                                                                                                                          VARCHAR2(20)
+ PROTECTION_LEVEL                                                                                                                                         VARCHAR2(20)
+ REMOTE_ARCHIVE                                                                                                                                           VARCHAR2(8)
+ ACTIVATION#                                                                                                                                              NUMBER
+ SWITCHOVER#                                                                                                                                              NUMBER
+ DATABASE_ROLE                                                                                                                                            VARCHAR2(16)
+ ARCHIVELOG_CHANGE#                                                                                                                                       NUMBER
+ ARCHIVELOG_COMPRESSION                                                                                                                                   VARCHAR2(8)
+ SWITCHOVER_STATUS                                                                                                                                        VARCHAR2(20)
+ DATAGUARD_BROKER                                                                                                                                         VARCHAR2(8)
+ GUARD_STATUS                                                                                                                                             VARCHAR2(7)
+ SUPPLEMENTAL_LOG_DATA_MIN                                                                                                                                VARCHAR2(8)
+ SUPPLEMENTAL_LOG_DATA_PK                                                                                                                                 VARCHAR2(3)
+ SUPPLEMENTAL_LOG_DATA_UI                                                                                                                                 VARCHAR2(3)
+ FORCE_LOGGING                                                                                                                                            VARCHAR2(39)
+ PLATFORM_ID                                                                                                                                              NUMBER
+ PLATFORM_NAME                                                                                                                                            VARCHAR2(101)
+ RECOVERY_TARGET_INCARNATION#                                                                                                                             NUMBER
+ LAST_OPEN_INCARNATION#                                                                                                                                   NUMBER
+ CURRENT_SCN                                                                                                                                              NUMBER
+ FLASHBACK_ON                                                                                                                                             VARCHAR2(18)
+ SUPPLEMENTAL_LOG_DATA_FK                                                                                                                                 VARCHAR2(3)
+ SUPPLEMENTAL_LOG_DATA_ALL                                                                                                                                VARCHAR2(3)
+ DB_UNIQUE_NAME                                                                                                                                           VARCHAR2(30)
+ STANDBY_BECAME_PRIMARY_SCN                                                                                                                               NUMBER
+ FS_FAILOVER_MODE                                                                                                                                         VARCHAR2(19)
+ FS_FAILOVER_STATUS                                                                                                                                       VARCHAR2(22)
+ FS_FAILOVER_CURRENT_TARGET                                                                                                                               VARCHAR2(30)
+ FS_FAILOVER_THRESHOLD                                                                                                                                    NUMBER
+ FS_FAILOVER_OBSERVER_PRESENT                                                                                                                             VARCHAR2(7)
+ FS_FAILOVER_OBSERVER_HOST                                                                                                                                VARCHAR2(512)
+ CONTROLFILE_CONVERTED                                                                                                                                    VARCHAR2(3)
+ PRIMARY_DB_UNIQUE_NAME                                                                                                                                   VARCHAR2(30)
+ SUPPLEMENTAL_LOG_DATA_PL                                                                                                                                 VARCHAR2(3)
+ MIN_REQUIRED_CAPTURE_CHANGE#                                                                                                                             NUMBER
+ CDB                                                                                                                                                      VARCHAR2(3)
+ CON_ID                                                                                                                                                   NUMBER
+ PENDING_ROLE_CHANGE_TASKS                                                                                                                                VARCHAR2(512)
+ CON_DBID                                                                                                                                                 NUMBER
+ FORCE_FULL_DB_CACHING                                                                                                                                    VARCHAR2(3)
+ SUPPLEMENTAL_LOG_DATA_SR                                                                                                                                 VARCHAR2(3)
+
+SQL> select controlfile_type, controlfile_sequence#, controlfile_change#, controlfile_time from v$database;
+
+CONTROL CONTROLFILE_SEQUENCE# CONTROLFILE_CHANGE# CONTROLFI                                                                                                                                                                                               
+------- --------------------- ------------------- ---------                                                                                                                                                                                               
+CURRENT                  6292             2814379 27-OCT-21                                                                                                                                                                                               
+
+SQL> select * from v$database;
+
+      DBID NAME                           CREATED   RESETLOGS_CHANGE# RESETLOGS PRIOR_RESETLOGS_CHANGE# PRIOR_RES LOG_MODE     CHECKPOINT_CHANGE# ARCHIVE_CHANGE# CONTROL CONTROLFI CONTROLFILE_SEQUENCE# CONTROLFILE_CHANGE# CONTROLFI OPEN_RESETL       
+---------- ------------------------------ --------- ----------------- --------- ----------------------- --------- ------------ ------------------ --------------- ------- --------- --------------------- ------------------- --------- -----------       
+VERSION_T OPEN_MODE            PROTECTION_MODE      PROTECTION_LEVEL     REMOTE_A ACTIVATION# SWITCHOVER# DATABASE_ROLE    ARCHIVELOG_CHANGE# ARCHIVEL SWITCHOVER_STATUS    DATAGUAR GUARD_S SUPPLEME SUP SUP FORCE_LOGGING                               
+--------- -------------------- -------------------- -------------------- -------- ----------- ----------- ---------------- ------------------ -------- -------------------- -------- ------- -------- --- --- ---------------------------------------     
+PLATFORM_ID PLATFORM_NAME                                                                                         RECOVERY_TARGET_INCARNATION# LAST_OPEN_INCARNATION# CURRENT_SCN FLASHBACK_ON       SUP SUP DB_UNIQUE_NAME                               
+----------- ----------------------------------------------------------------------------------------------------- ---------------------------- ---------------------- ----------- ------------------ --- --- ------------------------------               
+STANDBY_BECAME_PRIMARY_SCN FS_FAILOVER_MODE    FS_FAILOVER_STATUS     FS_FAILOVER_CURRENT_TARGET     FS_FAILOVER_THRESHOLD FS_FAIL                                                                                                                        
+-------------------------- ------------------- ---------------------- ------------------------------ --------------------- -------                                                                                                                        
+FS_FAILOVER_OBSERVER_HOST                                                                                                                                                                                                                                 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CON PRIMARY_DB_UNIQUE_NAME         SUP MIN_REQUIRED_CAPTURE_CHANGE# CDB     CON_ID                                                                                                                                                                        
+--- ------------------------------ --- ---------------------------- --- ----------                                                                                                                                                                        
+PENDING_ROLE_CHANGE_TASKS                                                                                                                                                                                                                                 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  CON_DBID FOR SUP                                                                                                                                                                                                                                        
+---------- --- ---                                                                                                                                                                                                                                        
+1614206847 ORCL                           20-OCT-21           1928875 20-OCT-21                       1 30-MAY-19 NOARCHIVELOG            2777223         2161408 CURRENT 20-OCT-21                  6292             2814379 27-OCT-21 NOT ALLOWED       
+20-OCT-21 READ WRITE           MAXIMUM PERFORMANCE  UNPROTECTED          ENABLED   1614195327  1614195327 PRIMARY                           0 DISABLED NOT ALLOWED          DISABLED NONE    NO       NO  NO  NO                                          
+         12 Microsoft Windows x86 64-bit                                                                                                     2                      2     2814402 NO                 NO  NO  orcl                                         
+                         0 DISABLED            DISABLED                                                                  0                                                                                                                                
+                                                                                                                                                                                                                                                          
+NO                                 NO                               NO           0                                                                                                                                                                        
+NOT APPLICABLE                                                                                                                                                                                                                                            
+1614206847 NO  NO                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                          
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> -- aratati din dictionar care sunt fisierele de control asignate la baza de date curenta si daca cand au fost create
+SQL> select controlfile_type, controlfile_sequence#, controlfile_change#, controlfile_time from v$database;
+
+CONTROL CONTROLFILE_SEQUENCE# CONTROLFILE_CHANGE# CONTROLFI                                                                                                                                                                                               
+------- --------------------- ------------------- ---------                                                                                                                                                                                               
+CURRENT                  6313             2815534 27-OCT-21                                                                                                                                                                                               
+
+SQL> desc v$database
+ Name                                                                                                                                            Null?    Type
+ ----------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------
+ DBID                                                                                                                                                     NUMBER
+ NAME                                                                                                                                                     VARCHAR2(9)
+ CREATED                                                                                                                                                  DATE
+ RESETLOGS_CHANGE#                                                                                                                                        NUMBER
+ RESETLOGS_TIME                                                                                                                                           DATE
+ PRIOR_RESETLOGS_CHANGE#                                                                                                                                  NUMBER
+ PRIOR_RESETLOGS_TIME                                                                                                                                     DATE
+ LOG_MODE                                                                                                                                                 VARCHAR2(12)
+ CHECKPOINT_CHANGE#                                                                                                                                       NUMBER
+ ARCHIVE_CHANGE#                                                                                                                                          NUMBER
+ CONTROLFILE_TYPE                                                                                                                                         VARCHAR2(7)
+ CONTROLFILE_CREATED                                                                                                                                      DATE
+ CONTROLFILE_SEQUENCE#                                                                                                                                    NUMBER
+ CONTROLFILE_CHANGE#                                                                                                                                      NUMBER
+ CONTROLFILE_TIME                                                                                                                                         DATE
+ OPEN_RESETLOGS                                                                                                                                           VARCHAR2(11)
+ VERSION_TIME                                                                                                                                             DATE
+ OPEN_MODE                                                                                                                                                VARCHAR2(20)
+ PROTECTION_MODE                                                                                                                                          VARCHAR2(20)
+ PROTECTION_LEVEL                                                                                                                                         VARCHAR2(20)
+ REMOTE_ARCHIVE                                                                                                                                           VARCHAR2(8)
+ ACTIVATION#                                                                                                                                              NUMBER
+ SWITCHOVER#                                                                                                                                              NUMBER
+ DATABASE_ROLE                                                                                                                                            VARCHAR2(16)
+ ARCHIVELOG_CHANGE#                                                                                                                                       NUMBER
+ ARCHIVELOG_COMPRESSION                                                                                                                                   VARCHAR2(8)
+ SWITCHOVER_STATUS                                                                                                                                        VARCHAR2(20)
+ DATAGUARD_BROKER                                                                                                                                         VARCHAR2(8)
+ GUARD_STATUS                                                                                                                                             VARCHAR2(7)
+ SUPPLEMENTAL_LOG_DATA_MIN                                                                                                                                VARCHAR2(8)
+ SUPPLEMENTAL_LOG_DATA_PK                                                                                                                                 VARCHAR2(3)
+ SUPPLEMENTAL_LOG_DATA_UI                                                                                                                                 VARCHAR2(3)
+ FORCE_LOGGING                                                                                                                                            VARCHAR2(39)
+ PLATFORM_ID                                                                                                                                              NUMBER
+ PLATFORM_NAME                                                                                                                                            VARCHAR2(101)
+ RECOVERY_TARGET_INCARNATION#                                                                                                                             NUMBER
+ LAST_OPEN_INCARNATION#                                                                                                                                   NUMBER
+ CURRENT_SCN                                                                                                                                              NUMBER
+ FLASHBACK_ON                                                                                                                                             VARCHAR2(18)
+ SUPPLEMENTAL_LOG_DATA_FK                                                                                                                                 VARCHAR2(3)
+ SUPPLEMENTAL_LOG_DATA_ALL                                                                                                                                VARCHAR2(3)
+ DB_UNIQUE_NAME                                                                                                                                           VARCHAR2(30)
+ STANDBY_BECAME_PRIMARY_SCN                                                                                                                               NUMBER
+ FS_FAILOVER_MODE                                                                                                                                         VARCHAR2(19)
+ FS_FAILOVER_STATUS                                                                                                                                       VARCHAR2(22)
+ FS_FAILOVER_CURRENT_TARGET                                                                                                                               VARCHAR2(30)
+ FS_FAILOVER_THRESHOLD                                                                                                                                    NUMBER
+ FS_FAILOVER_OBSERVER_PRESENT                                                                                                                             VARCHAR2(7)
+ FS_FAILOVER_OBSERVER_HOST                                                                                                                                VARCHAR2(512)
+ CONTROLFILE_CONVERTED                                                                                                                                    VARCHAR2(3)
+ PRIMARY_DB_UNIQUE_NAME                                                                                                                                   VARCHAR2(30)
+ SUPPLEMENTAL_LOG_DATA_PL                                                                                                                                 VARCHAR2(3)
+ MIN_REQUIRED_CAPTURE_CHANGE#                                                                                                                             NUMBER
+ CDB                                                                                                                                                      VARCHAR2(3)
+ CON_ID                                                                                                                                                   NUMBER
+ PENDING_ROLE_CHANGE_TASKS                                                                                                                                VARCHAR2(512)
+ CON_DBID                                                                                                                                                 NUMBER
+ FORCE_FULL_DB_CACHING                                                                                                                                    VARCHAR2(3)
+ SUPPLEMENTAL_LOG_DATA_SR                                                                                                                                 VARCHAR2(3)
+
+SQL> desc v$database
+ Name                                                                                                                                            Null?    Type
+ ----------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------
+ DBID                                                                                                                                                     NUMBER
+ NAME                                                                                                                                                     VARCHAR2(9)
+ CREATED                                                                                                                                                  DATE
+ RESETLOGS_CHANGE#                                                                                                                                        NUMBER
+ RESETLOGS_TIME                                                                                                                                           DATE
+ PRIOR_RESETLOGS_CHANGE#                                                                                                                                  NUMBER
+ PRIOR_RESETLOGS_TIME                                                                                                                                     DATE
+ LOG_MODE                                                                                                                                                 VARCHAR2(12)
+ CHECKPOINT_CHANGE#                                                                                                                                       NUMBER
+ ARCHIVE_CHANGE#                                                                                                                                          NUMBER
+ CONTROLFILE_TYPE                                                                                                                                         VARCHAR2(7)
+ CONTROLFILE_CREATED                                                                                                                                      DATE
+ CONTROLFILE_SEQUENCE#                                                                                                                                    NUMBER
+ CONTROLFILE_CHANGE#                                                                                                                                      NUMBER
+ CONTROLFILE_TIME                                                                                                                                         DATE
+ OPEN_RESETLOGS                                                                                                                                           VARCHAR2(11)
+ VERSION_TIME                                                                                                                                             DATE
+ OPEN_MODE                                                                                                                                                VARCHAR2(20)
+ PROTECTION_MODE                                                                                                                                          VARCHAR2(20)
+ PROTECTION_LEVEL                                                                                                                                         VARCHAR2(20)
+ REMOTE_ARCHIVE                                                                                                                                           VARCHAR2(8)
+ ACTIVATION#                                                                                                                                              NUMBER
+ SWITCHOVER#                                                                                                                                              NUMBER
+ DATABASE_ROLE                                                                                                                                            VARCHAR2(16)
+ ARCHIVELOG_CHANGE#                                                                                                                                       NUMBER
+ ARCHIVELOG_COMPRESSION                                                                                                                                   VARCHAR2(8)
+ SWITCHOVER_STATUS                                                                                                                                        VARCHAR2(20)
+ DATAGUARD_BROKER                                                                                                                                         VARCHAR2(8)
+ GUARD_STATUS                                                                                                                                             VARCHAR2(7)
+ SUPPLEMENTAL_LOG_DATA_MIN                                                                                                                                VARCHAR2(8)
+ SUPPLEMENTAL_LOG_DATA_PK                                                                                                                                 VARCHAR2(3)
+ SUPPLEMENTAL_LOG_DATA_UI                                                                                                                                 VARCHAR2(3)
+ FORCE_LOGGING                                                                                                                                            VARCHAR2(39)
+ PLATFORM_ID                                                                                                                                              NUMBER
+ PLATFORM_NAME                                                                                                                                            VARCHAR2(101)
+ RECOVERY_TARGET_INCARNATION#                                                                                                                             NUMBER
+ LAST_OPEN_INCARNATION#                                                                                                                                   NUMBER
+ CURRENT_SCN                                                                                                                                              NUMBER
+ FLASHBACK_ON                                                                                                                                             VARCHAR2(18)
+ SUPPLEMENTAL_LOG_DATA_FK                                                                                                                                 VARCHAR2(3)
+ SUPPLEMENTAL_LOG_DATA_ALL                                                                                                                                VARCHAR2(3)
+ DB_UNIQUE_NAME                                                                                                                                           VARCHAR2(30)
+ STANDBY_BECAME_PRIMARY_SCN                                                                                                                               NUMBER
+ FS_FAILOVER_MODE                                                                                                                                         VARCHAR2(19)
+ FS_FAILOVER_STATUS                                                                                                                                       VARCHAR2(22)
+ FS_FAILOVER_CURRENT_TARGET                                                                                                                               VARCHAR2(30)
+ FS_FAILOVER_THRESHOLD                                                                                                                                    NUMBER
+ FS_FAILOVER_OBSERVER_PRESENT                                                                                                                             VARCHAR2(7)
+ FS_FAILOVER_OBSERVER_HOST                                                                                                                                VARCHAR2(512)
+ CONTROLFILE_CONVERTED                                                                                                                                    VARCHAR2(3)
+ PRIMARY_DB_UNIQUE_NAME                                                                                                                                   VARCHAR2(30)
+ SUPPLEMENTAL_LOG_DATA_PL                                                                                                                                 VARCHAR2(3)
+ MIN_REQUIRED_CAPTURE_CHANGE#                                                                                                                             NUMBER
+ CDB                                                                                                                                                      VARCHAR2(3)
+ CON_ID                                                                                                                                                   NUMBER
+ PENDING_ROLE_CHANGE_TASKS                                                                                                                                VARCHAR2(512)
+ CON_DBID                                                                                                                                                 NUMBER
+ FORCE_FULL_DB_CACHING                                                                                                                                    VARCHAR2(3)
+ SUPPLEMENTAL_LOG_DATA_SR                                                                                                                                 VARCHAR2(3)
+
+SQL> select name from v$database;
+
+NAME                                                                                                                                                                                                                                                      
+------------------------------                                                                                                                                                                                                                            
+ORCL                                                                                                                                                                                                                                                      
+
+SQL> select name, created, controlfile_created from v$database;
+
+NAME                           CREATED   CONTROLFI                                                                                                                                                                                                        
+------------------------------ --------- ---------                                                                                                                                                                                                        
+ORCL                           20-OCT-21 20-OCT-21                                                                                                                                                                                                        
+
+SQL> show PARAMETER CONTROL_FILES
+
+NAME                                 TYPE        VALUE                                                                                                                                                                                                    
+------------------------------------ ----------- ------------------------------                                                                                                                                                                           
+control_files                        string      D:\ORACLE_19C\ORADATA\ORCL\CON                                                                                                                                                                           
+                                                 TROLFILE\O1_MF_JPZD6HMV_.CTL,                                                                                                                                                                            
+                                                 D:\ORACLE_19C\FAST_RECOVERY_AR                                                                                                                                                                           
+                                                 EA\ORCL\CONTROLFILE\O1_MF_JPZD                                                                                                                                                                           
+                                                 6HN9_.CTL                                                                                                                                                                                                
+SQL> desc v$controlfile_record_section
+ Name                                                                                                                                            Null?    Type
+ ----------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------
+ TYPE                                                                                                                                                     VARCHAR2(28)
+ RECORD_SIZE                                                                                                                                              NUMBER
+ RECORDS_TOTAL                                                                                                                                            NUMBER
+ RECORDS_USED                                                                                                                                             NUMBER
+ FIRST_INDEX                                                                                                                                              NUMBER
+ LAST_INDEX                                                                                                                                               NUMBER
+ LAST_RECID                                                                                                                                               NUMBER
+ CON_ID                                                                                                                                                   NUMBER
+
+SQL> desc v$controlfile_record_section
+ Name                                                                                                                                            Null?    Type
+ ----------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------
+ TYPE                                                                                                                                                     VARCHAR2(28)
+ RECORD_SIZE                                                                                                                                              NUMBER
+ RECORDS_TOTAL                                                                                                                                            NUMBER
+ RECORDS_USED                                                                                                                                             NUMBER
+ FIRST_INDEX                                                                                                                                              NUMBER
+ LAST_INDEX                                                                                                                                               NUMBER
+ LAST_RECID                                                                                                                                               NUMBER
+ CON_ID                                                                                                                                                   NUMBER
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> show PARAMETER CONTROL_FILES
+
+NAME                                 TYPE        VALUE                                                                                                                                                                                                    
+------------------------------------ ----------- ------------------------------                                                                                                                                                                           
+control_files                        string      D:\ORACLE_19C\ORADATA\ORCL\CON                                                                                                                                                                           
+                                                 TROLFILE\O1_MF_JPZD6HMV_.CTL,                                                                                                                                                                            
+                                                 D:\ORACLE_19C\FAST_RECOVERY_AR                                                                                                                                                                           
+                                                 EA\ORCL\CONTROLFILE\O1_MF_JPZD                                                                                                                                                                           
+                                                 6HN9_.CTL                                                                                                                                                                                                
+SQL> select name, created, controlfile_created from v$database;
+
+NAME                           CREATED   CONTROLFI                                                                                                                                                                                                        
+------------------------------ --------- ---------                                                                                                                                                                                                        
+ORCL                           20-OCT-21 20-OCT-21                                                                                                                                                                                                        
+
+SQL> -- aratati din dictionar care este numarul maxim de fisiere temporare care se pot creea pentru baza de date curenta
+SQL> desc v$tempfile
+ Name                                                                                                                                            Null?    Type
+ ----------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------
+ FILE#                                                                                                                                                    NUMBER
+ CREATION_CHANGE#                                                                                                                                         NUMBER
+ CREATION_TIME                                                                                                                                            DATE
+ TS#                                                                                                                                                      NUMBER
+ RFILE#                                                                                                                                                   NUMBER
+ STATUS                                                                                                                                                   VARCHAR2(7)
+ ENABLED                                                                                                                                                  VARCHAR2(10)
+ BYTES                                                                                                                                                    NUMBER
+ BLOCKS                                                                                                                                                   NUMBER
+ CREATE_BYTES                                                                                                                                             NUMBER
+ BLOCK_SIZE                                                                                                                                               NUMBER
+ NAME                                                                                                                                                     VARCHAR2(513)
+ CON_ID                                                                                                                                                   NUMBER
+
+SQL> desc v$datafile
+ Name                                                                                                                                            Null?    Type
+ ----------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------
+ FILE#                                                                                                                                                    NUMBER
+ CREATION_CHANGE#                                                                                                                                         NUMBER
+ CREATION_TIME                                                                                                                                            DATE
+ TS#                                                                                                                                                      NUMBER
+ RFILE#                                                                                                                                                   NUMBER
+ STATUS                                                                                                                                                   VARCHAR2(7)
+ ENABLED                                                                                                                                                  VARCHAR2(10)
+ CHECKPOINT_CHANGE#                                                                                                                                       NUMBER
+ CHECKPOINT_TIME                                                                                                                                          DATE
+ UNRECOVERABLE_CHANGE#                                                                                                                                    NUMBER
+ UNRECOVERABLE_TIME                                                                                                                                       DATE
+ LAST_CHANGE#                                                                                                                                             NUMBER
+ LAST_TIME                                                                                                                                                DATE
+ OFFLINE_CHANGE#                                                                                                                                          NUMBER
+ ONLINE_CHANGE#                                                                                                                                           NUMBER
+ ONLINE_TIME                                                                                                                                              DATE
+ BYTES                                                                                                                                                    NUMBER
+ BLOCKS                                                                                                                                                   NUMBER
+ CREATE_BYTES                                                                                                                                             NUMBER
+ BLOCK_SIZE                                                                                                                                               NUMBER
+ NAME                                                                                                                                                     VARCHAR2(513)
+ PLUGGED_IN                                                                                                                                               NUMBER
+ BLOCK1_OFFSET                                                                                                                                            NUMBER
+ AUX_NAME                                                                                                                                                 VARCHAR2(513)
+ FIRST_NONLOGGED_SCN                                                                                                                                      NUMBER
+ FIRST_NONLOGGED_TIME                                                                                                                                     DATE
+ FOREIGN_DBID                                                                                                                                             NUMBER
+ FOREIGN_CREATION_CHANGE#                                                                                                                                 NUMBER
+ FOREIGN_CREATION_TIME                                                                                                                                    DATE
+ PLUGGED_READONLY                                                                                                                                         VARCHAR2(3)
+ PLUGIN_CHANGE#                                                                                                                                           NUMBER
+ PLUGIN_RESETLOGS_CHANGE#                                                                                                                                 NUMBER
+ PLUGIN_RESETLOGS_TIME                                                                                                                                    DATE
+ CON_ID                                                                                                                                                   NUMBER
+
+SQL> select * from v$parameter where name='db_files';
+
+       NUM NAME                                 TYPE VALUE                                                                                                                                                                                                
+---------- ------------------------------ ---------- ----------------------------------------                                                                                                                                                             
+DISPLAY_VALUE                                                                                                                                                                                                                                             
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DEFAULT_VALUE                                                                                                                                                                                                                                             
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ISDEFAULT ISSES ISSYS_MOD ISPDB ISINS ISMODIFIED ISADJ ISDEP ISBAS                                                                                                                                                                                        
+--------- ----- --------- ----- ----- ---------- ----- ----- -----                                                                                                                                                                                        
+DESCRIPTION                                                                                                                                                                                                                                               
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+UPDATE_COMMENT                                                                                                                                                                                                                                            
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      HASH     CON_ID                                                                                                                                                                                                                                     
+---------- ----------                                                                                                                                                                                                                                     
+      2069 db_files                                3 200                                                                                                                                                                                                  
+200                                                                                                                                                                                                                                                       
+200                                                                                                                                                                                                                                                       
+TRUE      FALSE FALSE     TRUE  FALSE FALSE      FALSE FALSE FALSE                                                                                                                                                                                        
+max allowable # db files                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                                          
+ 314572703          0                                                                                                                                                                                                                                     
+                                                                                                                                                                                                                                                          
+
+SQL> desc v$controlfile_record_section
+ Name                                                                                                                                            Null?    Type
+ ----------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------
+ TYPE                                                                                                                                                     VARCHAR2(28)
+ RECORD_SIZE                                                                                                                                              NUMBER
+ RECORDS_TOTAL                                                                                                                                            NUMBER
+ RECORDS_USED                                                                                                                                             NUMBER
+ FIRST_INDEX                                                                                                                                              NUMBER
+ LAST_INDEX                                                                                                                                               NUMBER
+ LAST_RECID                                                                                                                                               NUMBER
+ CON_ID                                                                                                                                                   NUMBER
+
+SQL> select * from v$controlfile_record_section;
+
+TYPE                         RECORD_SIZE RECORDS_TOTAL RECORDS_USED FIRST_INDEX LAST_INDEX LAST_RECID     CON_ID                                                                                                                                          
+---------------------------- ----------- ------------- ------------ ----------- ---------- ---------- ----------                                                                                                                                          
+DATABASE                             316             1            1           0          0          0          0                                                                                                                                          
+CKPT PROGRESS                       8180            11            0           0          0          0          0                                                                                                                                          
+REDO THREAD                          256             8            1           0          0          0          0                                                                                                                                          
+REDO LOG                              72            16            3           0          0         15          0                                                                                                                                          
+DATAFILE                             520           100            7           0          0          5          0                                                                                                                                          
+FILENAME                             524          2298           13           0          0          0          0                                                                                                                                          
+TABLESPACE                           180           100            7           0          0          3          0                                                                                                                                          
+TEMPORARY FILENAME                    56           100            2           0          0          2          0                                                                                                                                          
+RMAN CONFIGURATION                  1108            50            0           0          0          0          0                                                                                                                                          
+LOG HISTORY                           56           292            7           1          7          7          0                                                                                                                                          
+OFFLINE RANGE                        200           163            0           0          0          0          0                                                                                                                                          
+ARCHIVED LOG                         584            28            0           0          0          0          0                                                                                                                                          
+BACKUP SET                            96           170            0           0          0          0          0                                                                                                                                          
+BACKUP PIECE                         780           209            0           0          0          0          0                                                                                                                                          
+BACKUP DATAFILE                      200           245            0           0          0          0          0                                                                                                                                          
+BACKUP REDOLOG                        76           215            0           0          0          0          0                                                                                                                                          
+DATAFILE COPY                        736           200            0           0          0          0          0                                                                                                                                          
+BACKUP CORRUPTION                     44           371            0           0          0          0          0                                                                                                                                          
+COPY CORRUPTION                       40           409            0           0          0          0          0                                                                                                                                          
+DELETED OBJECT                        20           818            0           0          0          0          0                                                                                                                                          
+PROXY COPY                           928           246            0           0          0          0          0                                                                                                                                          
+BACKUP SPFILE                        124           131            0           0          0          0          0                                                                                                                                          
+DATABASE INCARNATION                  56           292            2           1          2          2          0                                                                                                                                          
+FLASHBACK LOG                         84          2048            0           0          0          0          0                                                                                                                                          
+RECOVERY DESTINATION                 180             1            1           0          0          0          0                                                                                                                                          
+INSTANCE SPACE RESERVATION            28          1055            1           0          0          0          0                                                                                                                                          
+REMOVABLE RECOVERY FILES              32          1000            0           0          0          0          0                                                                                                                                          
+RMAN STATUS                          116           141            0           0          0          0          0                                                                                                                                          
+THREAD INSTANCE NAME MAPPING          80             8            8           0          0          0          0                                                                                                                                          
+MTTR                                 100             8            1           0          0          0          0                                                                                                                                          
+DATAFILE HISTORY                     568            57            0           0          0          0          0                                                                                                                                          
+STANDBY DATABASE MATRIX              400           128          128           0          0          0          0                                                                                                                                          
+GUARANTEED RESTORE POINT             256          2048            0           0          0          0          0                                                                                                                                          
+RESTORE POINT                        256          2108            0           0          0          0          0                                                                                                                                          
+DATABASE BLOCK CORRUPTION             80          8384            0           0          0          0          0                                                                                                                                          
+ACM OPERATION                        104            64           11           0          0          0          0                                                                                                                                          
+FOREIGN ARCHIVED LOG                 604          1002            0           0          0          0          0                                                                                                                                          
+PDB RECORD                           780            10            0           0          0          0          0                                                                                                                                          
+AUXILIARY DATAFILE COPY              584           128            0           0          0          0          0                                                                                                                                          
+MULTI INSTANCE REDO APPLY            556             1            0           0          0          0          0                                                                                                                                          
+PDBINC RECORD                        144           113            0           0          0          0          0                                                                                                                                          
+TABLESPACE KEY HISTORY               108           151            0           0          0          0          0                                                                                                                                          
+
+42 rows selected.
+
+SQL> select * from v$controlfile_record_section where type='temporary filename';
+
+no rows selected
+
+SQL> select * from v$controlfile_record_section where type='temporary_filename';
+
+no rows selected
+
+SQL> select * from v$controlfile_record_section where type='TEMPORARY_FILENAME';
+
+no rows selected
+
+SQL> select * from v$controlfile_record_section where type='TEMPORARY FILENAME';
+
+TYPE                         RECORD_SIZE RECORDS_TOTAL RECORDS_USED FIRST_INDEX LAST_INDEX LAST_RECID     CON_ID                                                                                                                                          
+---------------------------- ----------- ------------- ------------ ----------- ---------- ---------- ----------                                                                                                                                          
+TEMPORARY FILENAME                    56           100            2           0          0          2          0                                                                                                                                          
+
+SQL> -- aratati din dictionar care sunt fisierele de control asignate la baza de date curenta si data cand au fost create
+SQL> select name, controlfile_type, controlfile_created from v$database;
+
+NAME                           CONTROL CONTROLFI                                                                                                                                                                                                          
+------------------------------ ------- ---------                                                                                                                                                                                                          
+ORCL                           CURRENT 20-OCT-21                                                                                                                                                                                                          
+
+SQL> select name, value from v$parameter where name='control_files';
+
+NAME                           VALUE                                                                                                                                                                                                                      
+------------------------------ ----------------------------------------                                                                                                                                                                                   
+control_files                  D:\ORACLE_19C\ORADATA\ORCL\CONTROLFILE\O                                                                                                                                                                                   
+                               1_MF_JPZD6HMV_.CTL, D:\ORACLE_19C\FAST_R                                                                                                                                                                                   
+                               ECOVERY_AREA\ORCL\CONTROLFILE\O1_MF_JPZD                                                                                                                                                                                   
+                               6HN9_.CTL                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                                          
+
+SQL> show PARAMETER CONTROL_FILES
+
+NAME                                 TYPE        VALUE                                                                                                                                                                                                    
+------------------------------------ ----------- ------------------------------                                                                                                                                                                           
+control_files                        string      D:\ORACLE_19C\ORADATA\ORCL\CON                                                                                                                                                                           
+                                                 TROLFILE\O1_MF_JPZD6HMV_.CTL,                                                                                                                                                                            
+                                                 D:\ORACLE_19C\FAST_RECOVERY_AR                                                                                                                                                                           
+                                                 EA\ORCL\CONTROLFILE\O1_MF_JPZD                                                                                                                                                                           
+                                                 6HN9_.CTL                                                                                                                                                                                                
+SQL> select name, created, controlfile_created from v$database;
+
+NAME                           CREATED   CONTROLFI                                                                                                                                                                                                        
+------------------------------ --------- ---------                                                                                                                                                                                                        
+ORCL                           20-OCT-21 20-OCT-21                                                                                                                                                                                                        
+
+SQL> 
+SQL> 
+SQL> 
+SQL> update login_lab_ubd set data_sf= sysdate where laborator='Lab4';
+
+1 row updated.
+
+SQL> update login_lab_ubd set durata= round((data_sf-data_in)*24*60) where laborator='Lab4';
+
+1 row updated.
+
+SQL> commit;
+
+Commit complete.
+
+SQL> select instance_number,instance_name, to_char(startup_time, 'dd-mm-yyyy hh:mi:ss'), host_name from v$instance;
+
+INSTANCE_NUMBER INSTANCE_NAME    TO_CHAR(STARTUP_TIM HOST_NAME                                                                                                                                                                                            
+--------------- ---------------- ------------------- ----------------------------------------------------------------                                                                                                                                     
+              1 orcl             26-10-2021 11:04:08 DESKTOP-04HOUK7                                                                                                                                                                                      
+
+SQL> select nume_stud, grupa, laborator, to_char(data_in, 'dd-mm-yyyy hh:mi:ss') data_inceput,
+  2  to_char(data_sf, 'dd-mm-yyyy hh:mi:ss') data_sfarsit, durata minute_lucrate from login_lab_ubd;
+
+NUME_STUD                      GRUPA      LABORATOR  DATA_INCEPUT        DATA_SFARSIT        MINUTE_LUCRATE                                                                                                                                               
+------------------------------ ---------- ---------- ------------------- ------------------- --------------                                                                                                                                               
+Filimon Adrian                 342C2      Lab4       27-10-2021 07:24:44 27-10-2021 08:34:24             70                                                                                                                                               
+Filimon Adrian                 342C2      Lab3       20-10-2021 10:14:01                                                                                                                                                                                  
+
+SQL> 
+SQL> spool off;
