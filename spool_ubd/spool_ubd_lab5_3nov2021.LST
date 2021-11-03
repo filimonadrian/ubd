@@ -1,0 +1,1309 @@
+SQL> set lines 200
+SQL> set pages 100
+SQL> 
+SQL> select to_char(sysdate, 'dd-mm-yyyy hh:mi:ss') from dual;
+
+TO_CHAR(SYSDATE,'DD                                                                                                                                                                                     
+-------------------                                                                                                                                                                                     
+03-11-2021 10:08:31                                                                                                                                                                                     
+
+SQL> 
+SQL> --- incepe sesiune
+SQL> insert into login_lab_ubd values( 'Filimon Adrian', '342C2', 'Lab5', user, sysdate, null, null);
+
+1 row created.
+
+SQL> 
+SQL> select * from dual;
+
+D                                                                                                                                                                                                       
+-                                                                                                                                                                                                       
+X                                                                                                                                                                                                       
+
+SQL> select * from login_lab_ubd;
+
+NUME_STUD                      GRUPA      LABORATOR  NUME_USER  DATA_IN   DATA_SF       DURATA                                                                                                          
+------------------------------ ---------- ---------- ---------- --------- --------- ----------                                                                                                          
+Filimon Adrian                 342C2      Lab5       ABD1       03-NOV-21                                                                                                                               
+Filimon Adrian                 342C2      Lab4       ABD1       27-OCT-21 27-OCT-21         70                                                                                                          
+Filimon Adrian                 342C2      Lab3       ABD1       20-OCT-21                                                                                                                               
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> desc v$logfile
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ GROUP#                                                                                                                     NUMBER
+ STATUS                                                                                                                     VARCHAR2(7)
+ TYPE                                                                                                                       VARCHAR2(7)
+ MEMBER                                                                                                                     VARCHAR2(513)
+ IS_RECOVERY_DEST_FILE                                                                                                      VARCHAR2(3)
+ CON_ID                                                                                                                     NUMBER
+
+SQL> select * form v$logfile
+  2  ;
+select * form v$logfile
+         *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> select * from v$logfile;
+
+    GROUP# STATUS  TYPE                                                                                                                                                                                 
+---------- ------- -------                                                                                                                                                                              
+MEMBER                                                                                                                                                                                                  
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+IS_     CON_ID                                                                                                                                                                                          
+--- ----------                                                                                                                                                                                          
+         3         ONLINE                                                                                                                                                                               
+D:\ORACLE_19C\ORADATA\ORCL\ONLINELOG\O1_MF_3_JPZD6MVL_.LOG                                                                                                                                              
+NO           0                                                                                                                                                                                          
+                                                                                                                                                                                                        
+         3         ONLINE                                                                                                                                                                               
+D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\ONLINELOG\O1_MF_3_JPZD6NL8_.LOG                                                                                                                                   
+YES          0                                                                                                                                                                                          
+                                                                                                                                                                                                        
+         2         ONLINE                                                                                                                                                                               
+D:\ORACLE_19C\ORADATA\ORCL\ONLINELOG\O1_MF_2_JPZD6MVB_.LOG                                                                                                                                              
+NO           0                                                                                                                                                                                          
+                                                                                                                                                                                                        
+         2         ONLINE                                                                                                                                                                               
+D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\ONLINELOG\O1_MF_2_JPZD6NL0_.LOG                                                                                                                                   
+YES          0                                                                                                                                                                                          
+                                                                                                                                                                                                        
+         1         ONLINE                                                                                                                                                                               
+D:\ORACLE_19C\ORADATA\ORCL\ONLINELOG\O1_MF_1_JPZD6MV2_.LOG                                                                                                                                              
+NO           0                                                                                                                                                                                          
+                                                                                                                                                                                                        
+         1         ONLINE                                                                                                                                                                               
+D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\ONLINELOG\O1_MF_1_JPZD6NKD_.LOG                                                                                                                                   
+YES          0                                                                                                                                                                                          
+                                                                                                                                                                                                        
+
+6 rows selected.
+
+SQL> desc v$logfile
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ GROUP#                                                                                                                     NUMBER
+ STATUS                                                                                                                     VARCHAR2(7)
+ TYPE                                                                                                                       VARCHAR2(7)
+ MEMBER                                                                                                                     VARCHAR2(513)
+ IS_RECOVERY_DEST_FILE                                                                                                      VARCHAR2(3)
+ CON_ID                                                                                                                     NUMBER
+
+SQL> select * from v$logfile;
+
+    GROUP# STATUS  TYPE                                                                                                                                                                                 
+---------- ------- -------                                                                                                                                                                              
+MEMBER                                                                                                                                                                                                  
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+IS_     CON_ID                                                                                                                                                                                          
+--- ----------                                                                                                                                                                                          
+         3         ONLINE                                                                                                                                                                               
+D:\ORACLE_19C\ORADATA\ORCL\ONLINELOG\O1_MF_3_JPZD6MVL_.LOG                                                                                                                                              
+NO           0                                                                                                                                                                                          
+                                                                                                                                                                                                        
+         3         ONLINE                                                                                                                                                                               
+D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\ONLINELOG\O1_MF_3_JPZD6NL8_.LOG                                                                                                                                   
+YES          0                                                                                                                                                                                          
+                                                                                                                                                                                                        
+         2         ONLINE                                                                                                                                                                               
+D:\ORACLE_19C\ORADATA\ORCL\ONLINELOG\O1_MF_2_JPZD6MVB_.LOG                                                                                                                                              
+NO           0                                                                                                                                                                                          
+                                                                                                                                                                                                        
+         2         ONLINE                                                                                                                                                                               
+D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\ONLINELOG\O1_MF_2_JPZD6NL0_.LOG                                                                                                                                   
+YES          0                                                                                                                                                                                          
+                                                                                                                                                                                                        
+         1         ONLINE                                                                                                                                                                               
+D:\ORACLE_19C\ORADATA\ORCL\ONLINELOG\O1_MF_1_JPZD6MV2_.LOG                                                                                                                                              
+NO           0                                                                                                                                                                                          
+                                                                                                                                                                                                        
+         1         ONLINE                                                                                                                                                                               
+D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\ONLINELOG\O1_MF_1_JPZD6NKD_.LOG                                                                                                                                   
+YES          0                                                                                                                                                                                          
+                                                                                                                                                                                                        
+
+6 rows selected.
+
+SQL> set linesize 100
+SQL> select * from v$logfile;
+
+    GROUP# STATUS  TYPE                                                                             
+---------- ------- -------                                                                          
+MEMBER                                                                                              
+----------------------------------------------------------------------------------------------------
+IS_     CON_ID                                                                                      
+--- ----------                                                                                      
+         3         ONLINE                                                                           
+D:\ORACLE_19C\ORADATA\ORCL\ONLINELOG\O1_MF_3_JPZD6MVL_.LOG                                          
+NO           0                                                                                      
+                                                                                                    
+         3         ONLINE                                                                           
+D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\ONLINELOG\O1_MF_3_JPZD6NL8_.LOG                               
+YES          0                                                                                      
+                                                                                                    
+         2         ONLINE                                                                           
+D:\ORACLE_19C\ORADATA\ORCL\ONLINELOG\O1_MF_2_JPZD6MVB_.LOG                                          
+NO           0                                                                                      
+                                                                                                    
+         2         ONLINE                                                                           
+D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\ONLINELOG\O1_MF_2_JPZD6NL0_.LOG                               
+YES          0                                                                                      
+                                                                                                    
+         1         ONLINE                                                                           
+D:\ORACLE_19C\ORADATA\ORCL\ONLINELOG\O1_MF_1_JPZD6MV2_.LOG                                          
+NO           0                                                                                      
+                                                                                                    
+         1         ONLINE                                                                           
+D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\ONLINELOG\O1_MF_1_JPZD6NKD_.LOG                               
+YES          0                                                                                      
+                                                                                                    
+
+6 rows selected.
+
+SQL> column ONLINE format a50
+SQL> select * from v$logfile;
+
+    GROUP# STATUS  TYPE                                                                             
+---------- ------- -------                                                                          
+MEMBER                                                                                              
+----------------------------------------------------------------------------------------------------
+IS_     CON_ID                                                                                      
+--- ----------                                                                                      
+         3         ONLINE                                                                           
+D:\ORACLE_19C\ORADATA\ORCL\ONLINELOG\O1_MF_3_JPZD6MVL_.LOG                                          
+NO           0                                                                                      
+                                                                                                    
+         3         ONLINE                                                                           
+D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\ONLINELOG\O1_MF_3_JPZD6NL8_.LOG                               
+YES          0                                                                                      
+                                                                                                    
+         2         ONLINE                                                                           
+D:\ORACLE_19C\ORADATA\ORCL\ONLINELOG\O1_MF_2_JPZD6MVB_.LOG                                          
+NO           0                                                                                      
+                                                                                                    
+         2         ONLINE                                                                           
+D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\ONLINELOG\O1_MF_2_JPZD6NL0_.LOG                               
+YES          0                                                                                      
+                                                                                                    
+         1         ONLINE                                                                           
+D:\ORACLE_19C\ORADATA\ORCL\ONLINELOG\O1_MF_1_JPZD6MV2_.LOG                                          
+NO           0                                                                                      
+                                                                                                    
+         1         ONLINE                                                                           
+D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\ONLINELOG\O1_MF_1_JPZD6NKD_.LOG                               
+YES          0                                                                                      
+                                                                                                    
+
+6 rows selected.
+
+SQL> column CON_ID format a30
+SQL> select * from v$logfile;
+
+    GROUP# STATUS  TYPE                                                                             
+---------- ------- -------                                                                          
+MEMBER                                                                                              
+----------------------------------------------------------------------------------------------------
+IS_     CON_ID                                                                                      
+--- ----------                                                                                      
+         3         ONLINE                                                                           
+D:\ORACLE_19C\ORADATA\ORCL\ONLINELOG\O1_MF_3_JPZD6MVL_.LOG                                          
+NO  ##########                                                                                      
+                                                                                                    
+         3         ONLINE                                                                           
+D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\ONLINELOG\O1_MF_3_JPZD6NL8_.LOG                               
+YES ##########                                                                                      
+                                                                                                    
+         2         ONLINE                                                                           
+D:\ORACLE_19C\ORADATA\ORCL\ONLINELOG\O1_MF_2_JPZD6MVB_.LOG                                          
+NO  ##########                                                                                      
+                                                                                                    
+         2         ONLINE                                                                           
+D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\ONLINELOG\O1_MF_2_JPZD6NL0_.LOG                               
+YES ##########                                                                                      
+                                                                                                    
+         1         ONLINE                                                                           
+D:\ORACLE_19C\ORADATA\ORCL\ONLINELOG\O1_MF_1_JPZD6MV2_.LOG                                          
+NO  ##########                                                                                      
+                                                                                                    
+         1         ONLINE                                                                           
+D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\ONLINELOG\O1_MF_1_JPZD6NKD_.LOG                               
+YES ##########                                                                                      
+                                                                                                    
+
+6 rows selected.
+
+SQL> column GROUP# format a30
+SQL> select * from v$logfile;
+
+    GROUP# STATUS  TYPE                                                                             
+---------- ------- -------                                                                          
+MEMBER                                                                                              
+----------------------------------------------------------------------------------------------------
+IS_     CON_ID                                                                                      
+--- ----------                                                                                      
+##########         ONLINE                                                                           
+D:\ORACLE_19C\ORADATA\ORCL\ONLINELOG\O1_MF_3_JPZD6MVL_.LOG                                          
+NO  ##########                                                                                      
+                                                                                                    
+##########         ONLINE                                                                           
+D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\ONLINELOG\O1_MF_3_JPZD6NL8_.LOG                               
+YES ##########                                                                                      
+                                                                                                    
+##########         ONLINE                                                                           
+D:\ORACLE_19C\ORADATA\ORCL\ONLINELOG\O1_MF_2_JPZD6MVB_.LOG                                          
+NO  ##########                                                                                      
+                                                                                                    
+##########         ONLINE                                                                           
+D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\ONLINELOG\O1_MF_2_JPZD6NL0_.LOG                               
+YES ##########                                                                                      
+                                                                                                    
+##########         ONLINE                                                                           
+D:\ORACLE_19C\ORADATA\ORCL\ONLINELOG\O1_MF_1_JPZD6MV2_.LOG                                          
+NO  ##########                                                                                      
+                                                                                                    
+##########         ONLINE                                                                           
+D:\ORACLE_19C\FAST_RECOVERY_AREA\ORCL\ONLINELOG\O1_MF_1_JPZD6NKD_.LOG                               
+YES ##########                                                                                      
+                                                                                                    
+
+6 rows selected.
+
+SQL> column MEMBER format a30
+SQL> select * from v$logfile;
+
+    GROUP# STATUS  TYPE    MEMBER                         IS_     CON_ID                            
+---------- ------- ------- ------------------------------ --- ----------                            
+##########         ONLINE  D:\ORACLE_19C\ORADATA\ORCL\ONL NO  ##########                            
+                           INELOG\O1_MF_3_JPZD6MVL_.LOG                                             
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\FAST_RECOVERY_AR YES ##########                            
+                           EA\ORCL\ONLINELOG\O1_MF_3_JPZD                                           
+                           6NL8_.LOG                                                                
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\ORADATA\ORCL\ONL NO  ##########                            
+                           INELOG\O1_MF_2_JPZD6MVB_.LOG                                             
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\FAST_RECOVERY_AR YES ##########                            
+                           EA\ORCL\ONLINELOG\O1_MF_2_JPZD                                           
+                           6NL0_.LOG                                                                
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\ORADATA\ORCL\ONL NO  ##########                            
+                           INELOG\O1_MF_1_JPZD6MV2_.LOG                                             
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\FAST_RECOVERY_AR YES ##########                            
+                           EA\ORCL\ONLINELOG\O1_MF_1_JPZD                                           
+                           6NKD_.LOG                                                                
+                                                                                                    
+
+6 rows selected.
+
+SQL> 
+SQL> 
+SQL> desc v$database
+ Name                                                  Null?    Type
+ ----------------------------------------------------- -------- ------------------------------------
+ DBID                                                           NUMBER
+ NAME                                                           VARCHAR2(9)
+ CREATED                                                        DATE
+ RESETLOGS_CHANGE#                                              NUMBER
+ RESETLOGS_TIME                                                 DATE
+ PRIOR_RESETLOGS_CHANGE#                                        NUMBER
+ PRIOR_RESETLOGS_TIME                                           DATE
+ LOG_MODE                                                       VARCHAR2(12)
+ CHECKPOINT_CHANGE#                                             NUMBER
+ ARCHIVE_CHANGE#                                                NUMBER
+ CONTROLFILE_TYPE                                               VARCHAR2(7)
+ CONTROLFILE_CREATED                                            DATE
+ CONTROLFILE_SEQUENCE#                                          NUMBER
+ CONTROLFILE_CHANGE#                                            NUMBER
+ CONTROLFILE_TIME                                               DATE
+ OPEN_RESETLOGS                                                 VARCHAR2(11)
+ VERSION_TIME                                                   DATE
+ OPEN_MODE                                                      VARCHAR2(20)
+ PROTECTION_MODE                                                VARCHAR2(20)
+ PROTECTION_LEVEL                                               VARCHAR2(20)
+ REMOTE_ARCHIVE                                                 VARCHAR2(8)
+ ACTIVATION#                                                    NUMBER
+ SWITCHOVER#                                                    NUMBER
+ DATABASE_ROLE                                                  VARCHAR2(16)
+ ARCHIVELOG_CHANGE#                                             NUMBER
+ ARCHIVELOG_COMPRESSION                                         VARCHAR2(8)
+ SWITCHOVER_STATUS                                              VARCHAR2(20)
+ DATAGUARD_BROKER                                               VARCHAR2(8)
+ GUARD_STATUS                                                   VARCHAR2(7)
+ SUPPLEMENTAL_LOG_DATA_MIN                                      VARCHAR2(8)
+ SUPPLEMENTAL_LOG_DATA_PK                                       VARCHAR2(3)
+ SUPPLEMENTAL_LOG_DATA_UI                                       VARCHAR2(3)
+ FORCE_LOGGING                                                  VARCHAR2(39)
+ PLATFORM_ID                                                    NUMBER
+ PLATFORM_NAME                                                  VARCHAR2(101)
+ RECOVERY_TARGET_INCARNATION#                                   NUMBER
+ LAST_OPEN_INCARNATION#                                         NUMBER
+ CURRENT_SCN                                                    NUMBER
+ FLASHBACK_ON                                                   VARCHAR2(18)
+ SUPPLEMENTAL_LOG_DATA_FK                                       VARCHAR2(3)
+ SUPPLEMENTAL_LOG_DATA_ALL                                      VARCHAR2(3)
+ DB_UNIQUE_NAME                                                 VARCHAR2(30)
+ STANDBY_BECAME_PRIMARY_SCN                                     NUMBER
+ FS_FAILOVER_MODE                                               VARCHAR2(19)
+ FS_FAILOVER_STATUS                                             VARCHAR2(22)
+ FS_FAILOVER_CURRENT_TARGET                                     VARCHAR2(30)
+ FS_FAILOVER_THRESHOLD                                          NUMBER
+ FS_FAILOVER_OBSERVER_PRESENT                                   VARCHAR2(7)
+ FS_FAILOVER_OBSERVER_HOST                                      VARCHAR2(512)
+ CONTROLFILE_CONVERTED                                          VARCHAR2(3)
+ PRIMARY_DB_UNIQUE_NAME                                         VARCHAR2(30)
+ SUPPLEMENTAL_LOG_DATA_PL                                       VARCHAR2(3)
+ MIN_REQUIRED_CAPTURE_CHANGE#                                   NUMBER
+ CDB                                                            VARCHAR2(3)
+ CON_ID                                                         NUMBER
+ PENDING_ROLE_CHANGE_TASKS                                      VARCHAR2(512)
+ CON_DBID                                                       NUMBER
+ FORCE_FULL_DB_CACHING                                          VARCHAR2(3)
+ SUPPLEMENTAL_LOG_DATA_SR                                       VARCHAR2(3)
+
+SQL> 
+SQL> 
+SQL> select name, log_mode, resetlogs_time from v$database;
+
+NAME      LOG_MODE     RESETLOGS                                                                    
+--------- ------------ ---------                                                                    
+ORCL      NOARCHIVELOG 20-OCT-21                                                                    
+
+SQL> 
+SQL> 
+SQL> desc v$thread
+ Name                                                  Null?    Type
+ ----------------------------------------------------- -------- ------------------------------------
+ THREAD#                                                        NUMBER
+ STATUS                                                         VARCHAR2(6)
+ ENABLED                                                        VARCHAR2(8)
+ GROUPS                                                         NUMBER
+ INSTANCE                                                       VARCHAR2(80)
+ OPEN_TIME                                                      DATE
+ CURRENT_GROUP#                                                 NUMBER
+ SEQUENCE#                                                      NUMBER
+ CHECKPOINT_CHANGE#                                             NUMBER
+ CHECKPOINT_TIME                                                DATE
+ ENABLE_CHANGE#                                                 NUMBER
+ ENABLE_TIME                                                    DATE
+ DISABLE_CHANGE#                                                NUMBER
+ DISABLE_TIME                                                   DATE
+ LAST_REDO_SEQUENCE#                                            NUMBER
+ LAST_REDO_BLOCK                                                NUMBER
+ LAST_REDO_CHANGE#                                              NUMBER
+ LAST_REDO_TIME                                                 DATE
+ CON_ID                                                         NUMBER
+
+SQL> 
+SQL> 
+SQL> select groups, current_group#, sequence#, instance, status from v$thread;
+
+    GROUPS CURRENT_GROUP#  SEQUENCE#                                                                
+---------- -------------- ----------                                                                
+INSTANCE                                                                         STATUS             
+-------------------------------------------------------------------------------- ------             
+         3              3         15                                                                
+orcl                                                                             OPEN               
+                                                                                                    
+
+SQL> select groups, current_group#, sequence#, instance, status from v$thread;
+
+    GROUPS CURRENT_GROUP#  SEQUENCE#                                                                
+---------- -------------- ----------                                                                
+INSTANCE                                                                         STATUS             
+-------------------------------------------------------------------------------- ------             
+         3              3         15                                                                
+orcl                                                                             OPEN               
+                                                                                                    
+
+SQL> column instance format a30
+SQL> select groups, current_group#, sequence#, instance, status from v$thread;
+
+    GROUPS CURRENT_GROUP#  SEQUENCE# INSTANCE                       STATUS                          
+---------- -------------- ---------- ------------------------------ ------                          
+         3              3         15 orcl                           OPEN                            
+
+SQL> 
+SQL> 
+SQL> desc v$log
+ Name                                                  Null?    Type
+ ----------------------------------------------------- -------- ------------------------------------
+ GROUP#                                                         NUMBER
+ THREAD#                                                        NUMBER
+ SEQUENCE#                                                      NUMBER
+ BYTES                                                          NUMBER
+ BLOCKSIZE                                                      NUMBER
+ MEMBERS                                                        NUMBER
+ ARCHIVED                                                       VARCHAR2(3)
+ STATUS                                                         VARCHAR2(16)
+ FIRST_CHANGE#                                                  NUMBER
+ FIRST_TIME                                                     DATE
+ NEXT_CHANGE#                                                   NUMBER
+ NEXT_TIME                                                      DATE
+ CON_ID                                                         NUMBER
+
+SQL> 
+SQL> 
+SQL> 
+SQL> select group#, members, bytes, archived, status from v$log;
+
+    GROUP#    MEMBERS      BYTES ARC STATUS                                                         
+---------- ---------- ---------- --- ----------------                                               
+##########          2  209715200 NO  INACTIVE                                                       
+##########          2  209715200 NO  INACTIVE                                                       
+##########          2  209715200 NO  CURRENT                                                        
+
+SQL> desc v$instance
+ Name                                                  Null?    Type
+ ----------------------------------------------------- -------- ------------------------------------
+ INSTANCE_NUMBER                                                NUMBER
+ INSTANCE_NAME                                                  VARCHAR2(16)
+ HOST_NAME                                                      VARCHAR2(64)
+ VERSION                                                        VARCHAR2(17)
+ VERSION_LEGACY                                                 VARCHAR2(17)
+ VERSION_FULL                                                   VARCHAR2(17)
+ STARTUP_TIME                                                   DATE
+ STATUS                                                         VARCHAR2(12)
+ PARALLEL                                                       VARCHAR2(3)
+ THREAD#                                                        NUMBER
+ ARCHIVER                                                       VARCHAR2(7)
+ LOG_SWITCH_WAIT                                                VARCHAR2(15)
+ LOGINS                                                         VARCHAR2(10)
+ SHUTDOWN_PENDING                                               VARCHAR2(3)
+ DATABASE_STATUS                                                VARCHAR2(17)
+ INSTANCE_ROLE                                                  VARCHAR2(18)
+ ACTIVE_STATE                                                   VARCHAR2(9)
+ BLOCKED                                                        VARCHAR2(3)
+ CON_ID                                                         NUMBER
+ INSTANCE_MODE                                                  VARCHAR2(11)
+ EDITION                                                        VARCHAR2(7)
+ FAMILY                                                         VARCHAR2(80)
+ DATABASE_TYPE                                                  VARCHAR2(15)
+
+SQL> select instance_name, status, archiver from v$instance;
+
+INSTANCE_NAME    STATUS       ARCHIVE                                                               
+---------------- ------------ -------                                                               
+orcl             OPEN         STOPPED                                                               
+
+SQL> desc v$loghist
+ Name                                                  Null?    Type
+ ----------------------------------------------------- -------- ------------------------------------
+ THREAD#                                                        NUMBER
+ SEQUENCE#                                                      NUMBER
+ FIRST_CHANGE#                                                  NUMBER
+ FIRST_TIME                                                     DATE
+ SWITCH_CHANGE#                                                 NUMBER
+ CON_ID                                                         NUMBER
+
+SQL> select * from v$loghist;
+
+   THREAD#  SEQUENCE# FIRST_CHANGE# FIRST_TIM SWITCH_CHANGE#     CON_ID                             
+---------- ---------- ------------- --------- -------------- ----------                             
+         1          1       1928875 20-OCT-21        2068078 ##########                             
+         1          2       2068078 20-OCT-21        2161408 ##########                             
+         1          3       2161408 21-OCT-21        2339481 ##########                             
+         1          4       2339481 23-OCT-21        2413339 ##########                             
+         1          5       2413339 24-OCT-21        2513474 ##########                             
+         1          6       2513474 24-OCT-21        2674602 ##########                             
+         1          7       2674602 24-OCT-21        2777222 ##########                             
+         1          8       2777222 26-OCT-21        2917568 ##########                             
+         1          9       2917568 28-OCT-21        3026384 ##########                             
+         1         10       3026384 28-OCT-21        3167468 ##########                             
+         1         11       3167468 29-OCT-21        3273108 ##########                             
+         1         12       3273108 29-OCT-21        3396177 ##########                             
+         1         13       3396177 30-OCT-21        3544020 ##########                             
+         1         14       3544020 02-NOV-21        3658621 ##########                             
+
+14 rows selected.
+
+SQL> alter database add logfile member 'D:\temp\log2.rdo' to group 1;
+alter database add logfile member 'D:\temp\log2.rdo' to group 1
+*
+ERROR at line 1:
+ORA-00301: error in adding log file 'D:\temp\log2.rdo' - file cannot be created 
+ORA-27040: file create error, unable to create file 
+OSD-04002: unable to open file 
+O/S-Error: (OS 3) The system cannot find the path specified. 
+
+
+SQL> alter database add logfile member 'D:\log2.rdo' to group 1;
+
+Database altered.
+
+SQL> desc logfile;
+ERROR:
+ORA-04043: object logfile does not exist 
+
+
+SQL> select group#, members, bytes, archived, status from v$log;
+
+    GROUP#    MEMBERS      BYTES ARC STATUS                                                         
+---------- ---------- ---------- --- ----------------                                               
+##########          3  209715200 NO  INACTIVE                                                       
+##########          2  209715200 NO  INACTIVE                                                       
+##########          2  209715200 NO  CURRENT                                                        
+
+SQL> desc v$log
+ Name                                                  Null?    Type
+ ----------------------------------------------------- -------- ------------------------------------
+ GROUP#                                                         NUMBER
+ THREAD#                                                        NUMBER
+ SEQUENCE#                                                      NUMBER
+ BYTES                                                          NUMBER
+ BLOCKSIZE                                                      NUMBER
+ MEMBERS                                                        NUMBER
+ ARCHIVED                                                       VARCHAR2(3)
+ STATUS                                                         VARCHAR2(16)
+ FIRST_CHANGE#                                                  NUMBER
+ FIRST_TIME                                                     DATE
+ NEXT_CHANGE#                                                   NUMBER
+ NEXT_TIME                                                      DATE
+ CON_ID                                                         NUMBER
+
+SQL> desc v$logalter database clear logfile group 2;
+Usage: DESCRIBE [schema.]object[@db_link]
+SQL> alter database clear logfile group 2;
+
+Database altered.
+
+SQL> alter database rename file 'D:\log2.rdo' to 'D:\new_log.rdo';
+alter database rename file 'D:\log2.rdo' to 'D:\new_log.rdo'
+*
+ERROR at line 1:
+ORA-01511: error in renaming log/data files 
+ORA-01512: error renaming log file D:\LOG2.RDO - new file D:\new_log.rdo not found 
+ORA-27041: unable to open file 
+OSD-04002: unable to open file 
+O/S-Error: (OS 2) The system cannot find the file specified. 
+
+
+SQL> alter database rename file 'D:\log2.rdo' to 'D:\new_log.rdo';
+alter database rename file 'D:\log2.rdo' to 'D:\new_log.rdo'
+*
+ERROR at line 1:
+ORA-01511: error in renaming log/data files 
+ORA-01512: error renaming log file D:\LOG2.RDO - new file D:\new_log.rdo not found 
+ORA-27047: unable to read the header block of file 
+OSD-04006: ReadFile() failure, unable to read from file 
+O/S-Error: (OS 234) More data is available. 
+
+
+SQL> alter system switch logfile;
+
+System altered.
+
+SQL> alter database rename file 'D:\log2.rdo' to 'D:\new_log.rdo';
+alter database rename file 'D:\log2.rdo' to 'D:\new_log.rdo'
+*
+ERROR at line 1:
+ORA-01511: error in renaming log/data files 
+ORA-01512: error renaming log file D:\LOG2.RDO - new file D:\new_log.rdo not found 
+ORA-27047: unable to read the header block of file 
+OSD-04006: ReadFile() failure, unable to read from file 
+O/S-Error: (OS 234) More data is available. 
+
+
+SQL> alter database rename file 'D:\log2.rdo' to 'D:\new_log.rdo';
+
+Database altered.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> select * from v$logfile
+  2  ;
+
+    GROUP# STATUS  TYPE    MEMBER                         IS_     CON_ID                            
+---------- ------- ------- ------------------------------ --- ----------                            
+##########         ONLINE  D:\ORACLE_19C\ORADATA\ORCL\ONL NO  ##########                            
+                           INELOG\O1_MF_3_JPZD6MVL_.LOG                                             
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\FAST_RECOVERY_AR YES ##########                            
+                           EA\ORCL\ONLINELOG\O1_MF_3_JPZD                                           
+                           6NL8_.LOG                                                                
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\ORADATA\ORCL\ONL NO  ##########                            
+                           INELOG\O1_MF_2_JPZD6MVB_.LOG                                             
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\FAST_RECOVERY_AR YES ##########                            
+                           EA\ORCL\ONLINELOG\O1_MF_2_JPZD                                           
+                           6NL0_.LOG                                                                
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\ORADATA\ORCL\ONL NO  ##########                            
+                           INELOG\O1_MF_1_JPZD6MV2_.LOG                                             
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\FAST_RECOVERY_AR YES ##########                            
+                           EA\ORCL\ONLINELOG\O1_MF_1_JPZD                                           
+                           6NKD_.LOG                                                                
+                                                                                                    
+########## INVALID ONLINE  D:\NEW_LOG.RDO                 NO  ##########                            
+
+7 rows selected.
+
+SQL> select * from v$logfile;
+
+    GROUP# STATUS  TYPE    MEMBER                         IS_     CON_ID                            
+---------- ------- ------- ------------------------------ --- ----------                            
+##########         ONLINE  D:\ORACLE_19C\ORADATA\ORCL\ONL NO  ##########                            
+                           INELOG\O1_MF_3_JPZD6MVL_.LOG                                             
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\FAST_RECOVERY_AR YES ##########                            
+                           EA\ORCL\ONLINELOG\O1_MF_3_JPZD                                           
+                           6NL8_.LOG                                                                
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\ORADATA\ORCL\ONL NO  ##########                            
+                           INELOG\O1_MF_2_JPZD6MVB_.LOG                                             
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\FAST_RECOVERY_AR YES ##########                            
+                           EA\ORCL\ONLINELOG\O1_MF_2_JPZD                                           
+                           6NL0_.LOG                                                                
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\ORADATA\ORCL\ONL NO  ##########                            
+                           INELOG\O1_MF_1_JPZD6MV2_.LOG                                             
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\FAST_RECOVERY_AR YES ##########                            
+                           EA\ORCL\ONLINELOG\O1_MF_1_JPZD                                           
+                           6NKD_.LOG                                                                
+                                                                                                    
+########## INVALID ONLINE  D:\NEW_LOG.RDO                 NO  ##########                            
+
+7 rows selected.
+
+SQL> alter database drop logfile member 'D:\new_log.rdo';
+
+Database altered.
+
+SQL> select * from v$logfile;
+
+    GROUP# STATUS  TYPE    MEMBER                         IS_     CON_ID                            
+---------- ------- ------- ------------------------------ --- ----------                            
+##########         ONLINE  D:\ORACLE_19C\ORADATA\ORCL\ONL NO  ##########                            
+                           INELOG\O1_MF_3_JPZD6MVL_.LOG                                             
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\FAST_RECOVERY_AR YES ##########                            
+                           EA\ORCL\ONLINELOG\O1_MF_3_JPZD                                           
+                           6NL8_.LOG                                                                
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\ORADATA\ORCL\ONL NO  ##########                            
+                           INELOG\O1_MF_2_JPZD6MVB_.LOG                                             
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\FAST_RECOVERY_AR YES ##########                            
+                           EA\ORCL\ONLINELOG\O1_MF_2_JPZD                                           
+                           6NL0_.LOG                                                                
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\ORADATA\ORCL\ONL NO  ##########                            
+                           INELOG\O1_MF_1_JPZD6MV2_.LOG                                             
+                                                                                                    
+##########         ONLINE  D:\ORACLE_19C\FAST_RECOVERY_AR YES ##########                            
+                           EA\ORCL\ONLINELOG\O1_MF_1_JPZD                                           
+                           6NKD_.LOG                                                                
+                                                                                                    
+
+6 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> desc v$instance
+ Name                                                  Null?    Type
+ ----------------------------------------------------- -------- ------------------------------------
+ INSTANCE_NUMBER                                                NUMBER
+ INSTANCE_NAME                                                  VARCHAR2(16)
+ HOST_NAME                                                      VARCHAR2(64)
+ VERSION                                                        VARCHAR2(17)
+ VERSION_LEGACY                                                 VARCHAR2(17)
+ VERSION_FULL                                                   VARCHAR2(17)
+ STARTUP_TIME                                                   DATE
+ STATUS                                                         VARCHAR2(12)
+ PARALLEL                                                       VARCHAR2(3)
+ THREAD#                                                        NUMBER
+ ARCHIVER                                                       VARCHAR2(7)
+ LOG_SWITCH_WAIT                                                VARCHAR2(15)
+ LOGINS                                                         VARCHAR2(10)
+ SHUTDOWN_PENDING                                               VARCHAR2(3)
+ DATABASE_STATUS                                                VARCHAR2(17)
+ INSTANCE_ROLE                                                  VARCHAR2(18)
+ ACTIVE_STATE                                                   VARCHAR2(9)
+ BLOCKED                                                        VARCHAR2(3)
+ CON_ID                                                         NUMBER
+ INSTANCE_MODE                                                  VARCHAR2(11)
+ EDITION                                                        VARCHAR2(7)
+ FAMILY                                                         VARCHAR2(80)
+ DATABASE_TYPE                                                  VARCHAR2(15)
+
+SQL> 
+SQL> 
+SQL> 
+SQL> select instance_name, status, archiver from v$instance;
+
+INSTANCE_NAME    STATUS       ARCHIVE                                                               
+---------------- ------------ -------                                                               
+orcl             OPEN         STOPPED                                                               
+
+SQL> desc v$loghist
+ Name                                                  Null?    Type
+ ----------------------------------------------------- -------- ------------------------------------
+ THREAD#                                                        NUMBER
+ SEQUENCE#                                                      NUMBER
+ FIRST_CHANGE#                                                  NUMBER
+ FIRST_TIME                                                     DATE
+ SWITCH_CHANGE#                                                 NUMBER
+ CON_ID                                                         NUMBER
+
+SQL> select * from v$loghist;
+
+   THREAD#  SEQUENCE# FIRST_CHANGE# FIRST_TIM SWITCH_CHANGE#     CON_ID                             
+---------- ---------- ------------- --------- -------------- ----------                             
+         1          1       1928875 20-OCT-21        2068078 ##########                             
+         1          2       2068078 20-OCT-21        2161408 ##########                             
+         1          3       2161408 21-OCT-21        2339481 ##########                             
+         1          4       2339481 23-OCT-21        2413339 ##########                             
+         1          5       2413339 24-OCT-21        2513474 ##########                             
+         1          6       2513474 24-OCT-21        2674602 ##########                             
+         1          7       2674602 24-OCT-21        2777222 ##########                             
+         1          8       2777222 26-OCT-21        2917568 ##########                             
+         1          9       2917568 28-OCT-21        3026384 ##########                             
+         1         10       3026384 28-OCT-21        3167468 ##########                             
+         1         11       3167468 29-OCT-21        3273108 ##########                             
+         1         12       3273108 29-OCT-21        3396177 ##########                             
+         1         13       3396177 30-OCT-21        3544020 ##########                             
+         1         14       3544020 02-NOV-21        3658621 ##########                             
+         1         15       3658621 03-NOV-21        3666421 ##########                             
+
+15 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> select * from v$controlfile_record_section where type='TEMPORARY FILENAME';
+
+TYPE                         RECORD_SIZE RECORDS_TOTAL RECORDS_USED FIRST_INDEX LAST_INDEX          
+---------------------------- ----------- ------------- ------------ ----------- ----------          
+LAST_RECID     CON_ID                                                                               
+---------- ----------                                                                               
+TEMPORARY FILENAME                    56           100            2           0          0          
+         2 ##########                                                                               
+                                                                                                    
+
+SQL> linesize 150
+SP2-0734: unknown command beginning "linesize 1..." - rest of line ignored.
+SQL> set linesize 150
+SQL> select * from v$controlfile_record_section where type='TEMPORARY FILENAME';
+
+TYPE                         RECORD_SIZE RECORDS_TOTAL RECORDS_USED FIRST_INDEX LAST_INDEX LAST_RECID     CON_ID                                      
+---------------------------- ----------- ------------- ------------ ----------- ---------- ---------- ----------                                      
+TEMPORARY FILENAME                    56           100            2           0          0          2 ##########                                      
+
+SQL> desc v$logfile;
+ Name                                                                                Null?    Type
+ ----------------------------------------------------------------------------------- -------- --------------------------------------------------------
+ GROUP#                                                                                       NUMBER
+ STATUS                                                                                       VARCHAR2(7)
+ TYPE                                                                                         VARCHAR2(7)
+ MEMBER                                                                                       VARCHAR2(513)
+ IS_RECOVERY_DEST_FILE                                                                        VARCHAR2(3)
+ CON_ID                                                                                       NUMBER
+
+SQL> select * from v$logfile;
+
+    GROUP# STATUS  TYPE    MEMBER                         IS_     CON_ID                                                                              
+---------- ------- ------- ------------------------------ --- ----------                                                                              
+##########         ONLINE  D:\ORACLE_19C\ORADATA\ORCL\ONL NO  ##########                                                                              
+                           INELOG\O1_MF_3_JPZD6MVL_.LOG                                                                                               
+                                                                                                                                                      
+##########         ONLINE  D:\ORACLE_19C\FAST_RECOVERY_AR YES ##########                                                                              
+                           EA\ORCL\ONLINELOG\O1_MF_3_JPZD                                                                                             
+                           6NL8_.LOG                                                                                                                  
+                                                                                                                                                      
+##########         ONLINE  D:\ORACLE_19C\ORADATA\ORCL\ONL NO  ##########                                                                              
+                           INELOG\O1_MF_2_JPZD6MVB_.LOG                                                                                               
+                                                                                                                                                      
+##########         ONLINE  D:\ORACLE_19C\FAST_RECOVERY_AR YES ##########                                                                              
+                           EA\ORCL\ONLINELOG\O1_MF_2_JPZD                                                                                             
+                           6NL0_.LOG                                                                                                                  
+                                                                                                                                                      
+##########         ONLINE  D:\ORACLE_19C\ORADATA\ORCL\ONL NO  ##########                                                                              
+                           INELOG\O1_MF_1_JPZD6MV2_.LOG                                                                                               
+                                                                                                                                                      
+##########         ONLINE  D:\ORACLE_19C\FAST_RECOVERY_AR YES ##########                                                                              
+                           EA\ORCL\ONLINELOG\O1_MF_1_JPZD                                                                                             
+                           6NKD_.LOG                                                                                                                  
+                                                                                                                                                      
+
+6 rows selected.
+
+SQL> desc v$log
+ Name                                                                                Null?    Type
+ ----------------------------------------------------------------------------------- -------- --------------------------------------------------------
+ GROUP#                                                                                       NUMBER
+ THREAD#                                                                                      NUMBER
+ SEQUENCE#                                                                                    NUMBER
+ BYTES                                                                                        NUMBER
+ BLOCKSIZE                                                                                    NUMBER
+ MEMBERS                                                                                      NUMBER
+ ARCHIVED                                                                                     VARCHAR2(3)
+ STATUS                                                                                       VARCHAR2(16)
+ FIRST_CHANGE#                                                                                NUMBER
+ FIRST_TIME                                                                                   DATE
+ NEXT_CHANGE#                                                                                 NUMBER
+ NEXT_TIME                                                                                    DATE
+ CON_ID                                                                                       NUMBER
+
+SQL> select * from v$log;
+
+    GROUP#    THREAD#  SEQUENCE#      BYTES  BLOCKSIZE    MEMBERS ARC STATUS           FIRST_CHANGE# FIRST_TIM NEXT_CHANGE# NEXT_TIME     CON_ID      
+---------- ---------- ---------- ---------- ---------- ---------- --- ---------------- ------------- --------- ------------ --------- ----------      
+##########          1         13  209715200        512          2 NO  INACTIVE               3396177 30-OCT-21      3544020 02-NOV-21 ##########      
+##########          1         16  209715200        512          2 NO  CURRENT                3666421 03-NOV-21   1.8447E+19           ##########      
+##########          1         15  209715200        512          2 NO  INACTIVE               3658621 03-NOV-21      3666421 03-NOV-21 ##########      
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> -- 5) Faceti o lista cu grupurile fisierelor de log, fisierele membru, calea unde
+SQL> -- sunt create fizic si dimensiunile lor in MB
+SQL> select GROUP#, MEMBER from v$logfile;
+
+    GROUP# MEMBER                                                                                                                                     
+---------- ------------------------------                                                                                                             
+########## D:\ORACLE_19C\ORADATA\ORCL\ONL                                                                                                             
+           INELOG\O1_MF_3_JPZD6MVL_.LOG                                                                                                               
+                                                                                                                                                      
+########## D:\ORACLE_19C\FAST_RECOVERY_AR                                                                                                             
+           EA\ORCL\ONLINELOG\O1_MF_3_JPZD                                                                                                             
+           6NL8_.LOG                                                                                                                                  
+                                                                                                                                                      
+########## D:\ORACLE_19C\ORADATA\ORCL\ONL                                                                                                             
+           INELOG\O1_MF_2_JPZD6MVB_.LOG                                                                                                               
+                                                                                                                                                      
+########## D:\ORACLE_19C\FAST_RECOVERY_AR                                                                                                             
+           EA\ORCL\ONLINELOG\O1_MF_2_JPZD                                                                                                             
+           6NL0_.LOG                                                                                                                                  
+                                                                                                                                                      
+########## D:\ORACLE_19C\ORADATA\ORCL\ONL                                                                                                             
+           INELOG\O1_MF_1_JPZD6MV2_.LOG                                                                                                               
+                                                                                                                                                      
+########## D:\ORACLE_19C\FAST_RECOVERY_AR                                                                                                             
+           EA\ORCL\ONLINELOG\O1_MF_1_JPZD                                                                                                             
+           6NKD_.LOG                                                                                                                                  
+                                                                                                                                                      
+
+6 rows selected.
+
+SQL> select bytes from v$log;
+
+     BYTES                                                                                                                                            
+----------                                                                                                                                            
+ 209715200                                                                                                                                            
+ 209715200                                                                                                                                            
+ 209715200                                                                                                                                            
+
+SQL> 
+SQL> select * from v$logfile;
+
+    GROUP# STATUS  TYPE    MEMBER                         IS_     CON_ID                                                                              
+---------- ------- ------- ------------------------------ --- ----------                                                                              
+##########         ONLINE  D:\ORACLE_19C\ORADATA\ORCL\ONL NO  ##########                                                                              
+                           INELOG\O1_MF_3_JPZD6MVL_.LOG                                                                                               
+                                                                                                                                                      
+##########         ONLINE  D:\ORACLE_19C\FAST_RECOVERY_AR YES ##########                                                                              
+                           EA\ORCL\ONLINELOG\O1_MF_3_JPZD                                                                                             
+                           6NL8_.LOG                                                                                                                  
+                                                                                                                                                      
+##########         ONLINE  D:\ORACLE_19C\ORADATA\ORCL\ONL NO  ##########                                                                              
+                           INELOG\O1_MF_2_JPZD6MVB_.LOG                                                                                               
+                                                                                                                                                      
+##########         ONLINE  D:\ORACLE_19C\FAST_RECOVERY_AR YES ##########                                                                              
+                           EA\ORCL\ONLINELOG\O1_MF_2_JPZD                                                                                             
+                           6NL0_.LOG                                                                                                                  
+                                                                                                                                                      
+##########         ONLINE  D:\ORACLE_19C\ORADATA\ORCL\ONL NO  ##########                                                                              
+                           INELOG\O1_MF_1_JPZD6MV2_.LOG                                                                                               
+                                                                                                                                                      
+##########         ONLINE  D:\ORACLE_19C\FAST_RECOVERY_AR YES ##########                                                                              
+                           EA\ORCL\ONLINELOG\O1_MF_1_JPZD                                                                                             
+                           6NKD_.LOG                                                                                                                  
+                                                                                                                                                      
+
+6 rows selected.
+
+SQL> select bytes from v$log;
+
+     BYTES                                                                                                                                            
+----------                                                                                                                                            
+ 209715200                                                                                                                                            
+ 209715200                                                                                                                                            
+ 209715200                                                                                                                                            
+
+SQL> 
+SQL> 
+SQL> 
+SQL> select
+  2      a.group#,
+  3      a.member,
+  4      b.bytes,
+  5      b.members
+  6  FROM
+  7      v$logfile a,
+  8      v$log b
+  9  wHERE
+ 10      a.group# = b.group#;
+
+    GROUP# MEMBER                              BYTES    MEMBERS                                                                                       
+---------- ------------------------------ ---------- ----------                                                                                       
+########## D:\ORACLE_19C\ORADATA\ORCL\ONL  209715200          2                                                                                       
+           INELOG\O1_MF_3_JPZD6MVL_.LOG                                                                                                               
+                                                                                                                                                      
+########## D:\ORACLE_19C\FAST_RECOVERY_AR  209715200          2                                                                                       
+           EA\ORCL\ONLINELOG\O1_MF_3_JPZD                                                                                                             
+           6NL8_.LOG                                                                                                                                  
+                                                                                                                                                      
+########## D:\ORACLE_19C\ORADATA\ORCL\ONL  209715200          2                                                                                       
+           INELOG\O1_MF_2_JPZD6MVB_.LOG                                                                                                               
+                                                                                                                                                      
+########## D:\ORACLE_19C\FAST_RECOVERY_AR  209715200          2                                                                                       
+           EA\ORCL\ONLINELOG\O1_MF_2_JPZD                                                                                                             
+           6NL0_.LOG                                                                                                                                  
+                                                                                                                                                      
+########## D:\ORACLE_19C\ORADATA\ORCL\ONL  209715200          2                                                                                       
+           INELOG\O1_MF_1_JPZD6MV2_.LOG                                                                                                               
+                                                                                                                                                      
+########## D:\ORACLE_19C\FAST_RECOVERY_AR  209715200          2                                                                                       
+           EA\ORCL\ONLINELOG\O1_MF_1_JPZD                                                                                                             
+           6NKD_.LOG                                                                                                                                  
+                                                                                                                                                      
+
+6 rows selected.
+
+SQL> desc v$instance;
+ Name                                                                                Null?    Type
+ ----------------------------------------------------------------------------------- -------- --------------------------------------------------------
+ INSTANCE_NUMBER                                                                              NUMBER
+ INSTANCE_NAME                                                                                VARCHAR2(16)
+ HOST_NAME                                                                                    VARCHAR2(64)
+ VERSION                                                                                      VARCHAR2(17)
+ VERSION_LEGACY                                                                               VARCHAR2(17)
+ VERSION_FULL                                                                                 VARCHAR2(17)
+ STARTUP_TIME                                                                                 DATE
+ STATUS                                                                                       VARCHAR2(12)
+ PARALLEL                                                                                     VARCHAR2(3)
+ THREAD#                                                                                      NUMBER
+ ARCHIVER                                                                                     VARCHAR2(7)
+ LOG_SWITCH_WAIT                                                                              VARCHAR2(15)
+ LOGINS                                                                                       VARCHAR2(10)
+ SHUTDOWN_PENDING                                                                             VARCHAR2(3)
+ DATABASE_STATUS                                                                              VARCHAR2(17)
+ INSTANCE_ROLE                                                                                VARCHAR2(18)
+ ACTIVE_STATE                                                                                 VARCHAR2(9)
+ BLOCKED                                                                                      VARCHAR2(3)
+ CON_ID                                                                                       NUMBER
+ INSTANCE_MODE                                                                                VARCHAR2(11)
+ EDITION                                                                                      VARCHAR2(7)
+ FAMILY                                                                                       VARCHAR2(80)
+ DATABASE_TYPE                                                                                VARCHAR2(15)
+
+SQL> 
+SQL> 
+SQL> select instance_name, status from v$instance;
+
+INSTANCE_NAME    STATUS                                                                                                                               
+---------------- ------------                                                                                                                         
+orcl             OPEN                                                                                                                                 
+
+SQL> select groups, current_group#, sequence#, instance, status from v$thread;
+
+    GROUPS CURRENT_GROUP#  SEQUENCE# INSTANCE                       STATUS                                                                            
+---------- -------------- ---------- ------------------------------ ------                                                                            
+         3              2         16 orcl                           OPEN                                                                              
+
+SQL> 
+SQL> select
+  2      a.instance_name,
+  3      b.groups,
+  4      b.current_group#,
+  5      b.sequence#,
+  6      b.status
+  7  FROM
+  8      v$instance a,
+  9      v$thread b
+ 10  wHERE
+ 11      a.instance_name = b.instance;
+
+INSTANCE_NAME        GROUPS CURRENT_GROUP#  SEQUENCE# STATUS                                                                                          
+---------------- ---------- -------------- ---------- ------                                                                                          
+orcl                      3              2         16 OPEN                                                                                            
+
+SQL> 
+SQL> select * from v$controlfile_record_section;
+
+TYPE                         RECORD_SIZE RECORDS_TOTAL RECORDS_USED FIRST_INDEX LAST_INDEX LAST_RECID     CON_ID                                      
+---------------------------- ----------- ------------- ------------ ----------- ---------- ---------- ----------                                      
+DATABASE                             316             1            1           0          0          0 ##########                                      
+CKPT PROGRESS                       8180            11            0           0          0          0 ##########                                      
+REDO THREAD                          256             8            1           0          0          0 ##########                                      
+REDO LOG                              72            16            3           0          0         20 ##########                                      
+DATAFILE                             520           100            7           0          0          5 ##########                                      
+FILENAME                             524          2298           14           0          0          0 ##########                                      
+TABLESPACE                           180           100            7           0          0          3 ##########                                      
+TEMPORARY FILENAME                    56           100            2           0          0          2 ##########                                      
+RMAN CONFIGURATION                  1108            50            0           0          0          0 ##########                                      
+LOG HISTORY                           56           292           15           1         15         15 ##########                                      
+OFFLINE RANGE                        200           163            0           0          0          0 ##########                                      
+ARCHIVED LOG                         584            28            0           0          0          0 ##########                                      
+BACKUP SET                            96           170            0           0          0          0 ##########                                      
+BACKUP PIECE                         780           209            0           0          0          0 ##########                                      
+BACKUP DATAFILE                      200           245            0           0          0          0 ##########                                      
+BACKUP REDOLOG                        76           215            0           0          0          0 ##########                                      
+DATAFILE COPY                        736           200            0           0          0          0 ##########                                      
+BACKUP CORRUPTION                     44           371            0           0          0          0 ##########                                      
+COPY CORRUPTION                       40           409            0           0          0          0 ##########                                      
+DELETED OBJECT                        20           818            0           0          0          0 ##########                                      
+PROXY COPY                           928           246            0           0          0          0 ##########                                      
+BACKUP SPFILE                        124           131            0           0          0          0 ##########                                      
+DATABASE INCARNATION                  56           292            2           1          2          2 ##########                                      
+FLASHBACK LOG                         84          2048            0           0          0          0 ##########                                      
+RECOVERY DESTINATION                 180             1            1           0          0          0 ##########                                      
+INSTANCE SPACE RESERVATION            28          1055            1           0          0          0 ##########                                      
+REMOVABLE RECOVERY FILES              32          1000            0           0          0          0 ##########                                      
+RMAN STATUS                          116           141            0           0          0          0 ##########                                      
+THREAD INSTANCE NAME MAPPING          80             8            8           0          0          0 ##########                                      
+MTTR                                 100             8            1           0          0          0 ##########                                      
+DATAFILE HISTORY                     568            57            0           0          0          0 ##########                                      
+STANDBY DATABASE MATRIX              400           128          128           0          0          0 ##########                                      
+GUARANTEED RESTORE POINT             256          2048            0           0          0          0 ##########                                      
+RESTORE POINT                        256          2108            0           0          0          0 ##########                                      
+DATABASE BLOCK CORRUPTION             80          8384            0           0          0          0 ##########                                      
+ACM OPERATION                        104            64           11           0          0          0 ##########                                      
+FOREIGN ARCHIVED LOG                 604          1002            0           0          0          0 ##########                                      
+PDB RECORD                           780            10            0           0          0          0 ##########                                      
+AUXILIARY DATAFILE COPY              584           128            0           0          0          0 ##########                                      
+MULTI INSTANCE REDO APPLY            556             1            0           0          0          0 ##########                                      
+PDBINC RECORD                        144           113            0           0          0          0 ##########                                      
+TABLESPACE KEY HISTORY               108           151            0           0          0          0 ##########                                      
+
+42 rows selected.
+
+SQL> select * from v$controlfile_record_section where type='TEMPORARY FILENAME';
+
+TYPE                         RECORD_SIZE RECORDS_TOTAL RECORDS_USED FIRST_INDEX LAST_INDEX LAST_RECID     CON_ID                                      
+---------------------------- ----------- ------------- ------------ ----------- ---------- ---------- ----------                                      
+TEMPORARY FILENAME                    56           100            2           0          0          2 ##########                                      
+
+SQL> desc
+Usage: DESCRIBE [schema.]object[@db_link]
+SQL> 
+SQL> 
+SQL> 
+SQL> select * from v$controlfile_record_section where type='TABLESPACE';
+
+TYPE                         RECORD_SIZE RECORDS_TOTAL RECORDS_USED FIRST_INDEX LAST_INDEX LAST_RECID     CON_ID                                      
+---------------------------- ----------- ------------- ------------ ----------- ---------- ---------- ----------                                      
+TABLESPACE                           180           100            7           0          0          3 ##########                                      
+
+SQL> select * from v$controlfile_record_section where type='TABLESPACE' AND type = 'DATAFILE';
+
+no rows selected
+
+SQL> 
+SQL> select * from v$controlfile_record_section where type='TABLESPACE' OR type = 'DATAFILE';
+
+TYPE                         RECORD_SIZE RECORDS_TOTAL RECORDS_USED FIRST_INDEX LAST_INDEX LAST_RECID     CON_ID                                      
+---------------------------- ----------- ------------- ------------ ----------- ---------- ---------- ----------                                      
+DATAFILE                             520           100            7           0          0          5 ##########                                      
+TABLESPACE                           180           100            7           0          0          3 ##########                                      
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> -- 4) aratati din dictionar numarul de inregistrari care pot fi stocate si numarul
+SQL> -- de inregistrari utilizate pentru parametrii aferenti fisierelor de date si
+SQL> -- tablespace-urile create pe baza de date curenta
+SQL> select * from v$controlfile_record_section where type='TABLESPACE' OR type = 'DATAFILE';
+
+TYPE                         RECORD_SIZE RECORDS_TOTAL RECORDS_USED FIRST_INDEX LAST_INDEX LAST_RECID     CON_ID                                      
+---------------------------- ----------- ------------- ------------ ----------- ---------- ---------- ----------                                      
+DATAFILE                             520           100            7           0          0          5 ##########                                      
+TABLESPACE                           180           100            7           0          0          3 ##########                                      
+
+SQL> 
+SQL> 
+SQL> -- 5) Faceti o lista cu grupurile fisierelor de log, fisierele membru, calea unde
+SQL> -- sunt create fizic si dimensiunile lor in MB
+SQL> select
+  2      a.group#,
+  3      a.member,
+  4      b.bytes,
+  5      b.members
+  6  FROM
+  7      v$logfile a,
+  8      v$log b
+  9  wHERE
+ 10      a.group# = b.group#;
+
+    GROUP# MEMBER                              BYTES    MEMBERS                                                                                       
+---------- ------------------------------ ---------- ----------                                                                                       
+########## D:\ORACLE_19C\ORADATA\ORCL\ONL  209715200          2                                                                                       
+           INELOG\O1_MF_3_JPZD6MVL_.LOG                                                                                                               
+                                                                                                                                                      
+########## D:\ORACLE_19C\FAST_RECOVERY_AR  209715200          2                                                                                       
+           EA\ORCL\ONLINELOG\O1_MF_3_JPZD                                                                                                             
+           6NL8_.LOG                                                                                                                                  
+                                                                                                                                                      
+########## D:\ORACLE_19C\ORADATA\ORCL\ONL  209715200          2                                                                                       
+           INELOG\O1_MF_2_JPZD6MVB_.LOG                                                                                                               
+                                                                                                                                                      
+########## D:\ORACLE_19C\FAST_RECOVERY_AR  209715200          2                                                                                       
+           EA\ORCL\ONLINELOG\O1_MF_2_JPZD                                                                                                             
+           6NL0_.LOG                                                                                                                                  
+                                                                                                                                                      
+########## D:\ORACLE_19C\ORADATA\ORCL\ONL  209715200          2                                                                                       
+           INELOG\O1_MF_1_JPZD6MV2_.LOG                                                                                                               
+                                                                                                                                                      
+########## D:\ORACLE_19C\FAST_RECOVERY_AR  209715200          2                                                                                       
+           EA\ORCL\ONLINELOG\O1_MF_1_JPZD                                                                                                             
+           6NKD_.LOG                                                                                                                                  
+                                                                                                                                                      
+
+6 rows selected.
+
+SQL> 
+SQL> -- 6) aratati din dictionar numele instantei curente si grupurile fisierelor log
+SQL> -- aflate in starea 'OPEN'
+SQL> 
+SQL> select
+  2      a.instance_name,
+  3      b.groups,
+  4      b.current_group#,
+  5      b.sequence#,
+  6      b.status
+  7  FROM
+  8      v$instance a,
+  9      v$thread b
+ 10  wHERE
+ 11      a.instance_name = b.instance;
+
+INSTANCE_NAME        GROUPS CURRENT_GROUP#  SEQUENCE# STATUS                                                                                          
+---------------- ---------- -------------- ---------- ------                                                                                          
+orcl                      3              2         16 OPEN                                                                                            
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> select * from v$controlfile_record_section where type='TABLESPACE' OR type = 'DATAFILE';
+
+TYPE                         RECORD_SIZE RECORDS_TOTAL RECORDS_USED FIRST_INDEX LAST_INDEX LAST_RECID     CON_ID                                      
+---------------------------- ----------- ------------- ------------ ----------- ---------- ---------- ----------                                      
+DATAFILE                             520           100            7           0          0          5 ##########                                      
+TABLESPACE                           180           100            7           0          0          3 ##########                                      
+
+SQL> select
+  2      a.group#,
+  3      a.member,
+  4      b.bytes,
+  5      b.members
+  6  FROM
+  7      v$logfile a,
+  8      v$log b
+  9  wHERE
+ 10      a.group# = b.group#;
+
+    GROUP# MEMBER                              BYTES    MEMBERS                                                                                       
+---------- ------------------------------ ---------- ----------                                                                                       
+########## D:\ORACLE_19C\ORADATA\ORCL\ONL  209715200          2                                                                                       
+           INELOG\O1_MF_3_JPZD6MVL_.LOG                                                                                                               
+                                                                                                                                                      
+########## D:\ORACLE_19C\FAST_RECOVERY_AR  209715200          2                                                                                       
+           EA\ORCL\ONLINELOG\O1_MF_3_JPZD                                                                                                             
+           6NL8_.LOG                                                                                                                                  
+                                                                                                                                                      
+########## D:\ORACLE_19C\ORADATA\ORCL\ONL  209715200          2                                                                                       
+           INELOG\O1_MF_2_JPZD6MVB_.LOG                                                                                                               
+                                                                                                                                                      
+########## D:\ORACLE_19C\FAST_RECOVERY_AR  209715200          2                                                                                       
+           EA\ORCL\ONLINELOG\O1_MF_2_JPZD                                                                                                             
+           6NL0_.LOG                                                                                                                                  
+                                                                                                                                                      
+########## D:\ORACLE_19C\ORADATA\ORCL\ONL  209715200          2                                                                                       
+           INELOG\O1_MF_1_JPZD6MV2_.LOG                                                                                                               
+                                                                                                                                                      
+########## D:\ORACLE_19C\FAST_RECOVERY_AR  209715200          2                                                                                       
+           EA\ORCL\ONLINELOG\O1_MF_1_JPZD                                                                                                             
+           6NKD_.LOG                                                                                                                                  
+                                                                                                                                                      
+
+6 rows selected.
+
+SQL> select
+  2      a.instance_name,
+  3      b.groups,
+  4      b.current_group#,
+  5      b.sequence#,
+  6      b.status
+  7  FROM
+  8      v$instance a,
+  9      v$thread b
+ 10  wHERE
+ 11      a.instance_name = b.instance;
+
+INSTANCE_NAME        GROUPS CURRENT_GROUP#  SEQUENCE# STATUS                                                                                          
+---------------- ---------- -------------- ---------- ------                                                                                          
+orcl                      3              2         16 OPEN                                                                                            
+
+SQL> 
+SQL> 
+SQL> update login_lab_ubd set data_sf= sysdate where laborator='Lab5';
+
+1 row updated.
+
+SQL> update login_lab_ubd set durata= round((data_sf-data_in)*24*60) where laborator='Lab5';
+
+1 row updated.
+
+SQL> commit;
+
+Commit complete.
+
+SQL> select instance_number,instance_name, to_char(startup_time, 'dd-mm-yyyy hh:mi:ss'), host_name from v$instance;
+
+INSTANCE_NUMBER INSTANCE_NAME    TO_CHAR(STARTUP_TIM HOST_NAME                                                                                        
+--------------- ---------------- ------------------- ----------------------------------------------------------------                                 
+              1 orcl             03-11-2021 08:09:24 DESKTOP-04HOUK7                                                                                  
+
+SQL> select nume_stud, grupa, laborator, to_char(data_in, 'dd-mm-yyyy hh:mi:ss') data_inceput,
+  2  to_char(data_sf, 'dd-mm-yyyy hh:mi:ss') data_sfarsit, durata minute_lucrate from login_lab_ubd;
+
+NUME_STUD                      GRUPA      LABORATOR  DATA_INCEPUT        DATA_SFARSIT        MINUTE_LUCRATE                                           
+------------------------------ ---------- ---------- ------------------- ------------------- --------------                                           
+Filimon Adrian                 342C2      Lab5       03-11-2021 10:08:31 03-11-2021 11:40:32             92                                           
+Filimon Adrian                 342C2      Lab4       27-10-2021 07:24:44 27-10-2021 08:34:24             70                                           
+Filimon Adrian                 342C2      Lab3       20-10-2021 10:14:01                                                                              
+
+SQL> 
+SQL> spool off;
