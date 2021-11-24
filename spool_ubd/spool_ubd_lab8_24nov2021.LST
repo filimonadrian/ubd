@@ -1,0 +1,1026 @@
+SQL> set lines 200
+SQL> set pages 100
+SQL> 
+SQL> select to_char(sysdate, 'dd-mm-yyyy hh:mi:ss') from dual;
+
+TO_CHAR(SYSDATE,'DD                                                                                                                                                                                     
+-------------------                                                                                                                                                                                     
+24-11-2021 10:08:17                                                                                                                                                                                     
+
+SQL> 
+SQL> --- incepe sesiune
+SQL> insert into login_lab_ubd values( 'Filimon Adrian', '342C2', 'Lab8', user, sysdate, null, null);
+
+1 row created.
+
+SQL> 
+SQL> -- 1) Crearea unui tablespace de undo:
+SQL> create undo tablespace BD_UNDO datafile 'd:\undo_db01.dbf' size 2M;
+create undo tablespace BD_UNDO datafile 'd:\undo_db01.dbf' size 2M
+*
+ERROR at line 1:
+ORA-01543: tablespace 'BD_UNDO' already exists 
+
+
+SQL> -- 2) Crearea unui segment de undo in tablespace-ul de undo:
+SQL> create rollback segment UBD_UNDO tablespace BD_UNDO storage (initial 100k next 100k optimal 4M minextents 20 maxextents 100);
+
+Rollback segment created.
+
+SQL> desc dba_rollback_segs
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ SEGMENT_NAME                                                                                                      NOT NULL VARCHAR2(30)
+ OWNER                                                                                                                      VARCHAR2(6)
+ TABLESPACE_NAME                                                                                                   NOT NULL VARCHAR2(30)
+ SEGMENT_ID                                                                                                        NOT NULL NUMBER
+ FILE_ID                                                                                                           NOT NULL NUMBER
+ BLOCK_ID                                                                                                          NOT NULL NUMBER
+ INITIAL_EXTENT                                                                                                             NUMBER
+ NEXT_EXTENT                                                                                                                NUMBER
+ MIN_EXTENTS                                                                                                       NOT NULL NUMBER
+ MAX_EXTENTS                                                                                                       NOT NULL NUMBER
+ PCT_INCREASE                                                                                                               NUMBER
+ STATUS                                                                                                                     VARCHAR2(16)
+ INSTANCE_NUM                                                                                                               VARCHAR2(40)
+ RELATIVE_FNO                                                                                                      NOT NULL NUMBER
+
+SQL> desc dba_rollback_segs
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ SEGMENT_NAME                                                                                                      NOT NULL VARCHAR2(30)
+ OWNER                                                                                                                      VARCHAR2(6)
+ TABLESPACE_NAME                                                                                                   NOT NULL VARCHAR2(30)
+ SEGMENT_ID                                                                                                        NOT NULL NUMBER
+ FILE_ID                                                                                                           NOT NULL NUMBER
+ BLOCK_ID                                                                                                          NOT NULL NUMBER
+ INITIAL_EXTENT                                                                                                             NUMBER
+ NEXT_EXTENT                                                                                                                NUMBER
+ MIN_EXTENTS                                                                                                       NOT NULL NUMBER
+ MAX_EXTENTS                                                                                                       NOT NULL NUMBER
+ PCT_INCREASE                                                                                                               NUMBER
+ STATUS                                                                                                                     VARCHAR2(16)
+ INSTANCE_NUM                                                                                                               VARCHAR2(40)
+ RELATIVE_FNO                                                                                                      NOT NULL NUMBER
+
+SQL> column segment_name format a30
+SQL> column tablespace format a30
+SQL> select segment_name,tablespace_name,owner,status from dba_rollback_segs;
+
+SEGMENT_NAME                   TABLESPACE_NAME                OWNER  STATUS                                                                                                                             
+------------------------------ ------------------------------ ------ ----------------                                                                                                                   
+SYSTEM                         SYSTEM                         SYS    ONLINE                                                                                                                             
+_SYSSMU1_3741171459$           UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU2_1557575246$           UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU3_3193270435$           UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU4_2372004640$           UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU5_553218552$            UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU6_3809612316$           UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU7_3306078869$           UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU8_115127830$            UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU9_4165470211$           UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU10_3563521556$          UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU11_3803933068$          BD_UNDO                        PUBLIC OFFLINE                                                                                                                            
+_SYSSMU12_923534793$           BD_UNDO                        PUBLIC OFFLINE                                                                                                                            
+_SYSSMU13_133832675$           BD_UNDO                        PUBLIC OFFLINE                                                                                                                            
+_SYSSMU14_1079045149$          BD_UNDO                        PUBLIC OFFLINE                                                                                                                            
+_SYSSMU15_780013251$           BD_UNDO                        PUBLIC OFFLINE                                                                                                                            
+_SYSSMU16_3728680523$          BD_UNDO                        PUBLIC OFFLINE                                                                                                                            
+_SYSSMU17_1833252171$          BD_UNDO                        PUBLIC OFFLINE                                                                                                                            
+_SYSSMU18_2442432176$          BD_UNDO                        PUBLIC OFFLINE                                                                                                                            
+
+19 rows selected.
+
+SQL> desc v$rollname
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ USN                                                                                                                        NUMBER
+ NAME                                                                                                              NOT NULL VARCHAR2(30)
+ CON_ID                                                                                                                     NUMBER
+
+SQL> select * from v$rollname;
+
+       USN NAME                               CON_ID                                                                                                                                                    
+---------- ------------------------------ ----------                                                                                                                                                    
+         0 SYSTEM                                  0                                                                                                                                                    
+         1 _SYSSMU1_3741171459$                    0                                                                                                                                                    
+         2 _SYSSMU2_1557575246$                    0                                                                                                                                                    
+         3 _SYSSMU3_3193270435$                    0                                                                                                                                                    
+         4 _SYSSMU4_2372004640$                    0                                                                                                                                                    
+         5 _SYSSMU5_553218552$                     0                                                                                                                                                    
+         6 _SYSSMU6_3809612316$                    0                                                                                                                                                    
+         7 _SYSSMU7_3306078869$                    0                                                                                                                                                    
+         8 _SYSSMU8_115127830$                     0                                                                                                                                                    
+         9 _SYSSMU9_4165470211$                    0                                                                                                                                                    
+        10 _SYSSMU10_3563521556$                   0                                                                                                                                                    
+
+11 rows selected.
+
+SQL> desc v$rollstat
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ USN                                                                                                                        NUMBER
+ LATCH                                                                                                                      NUMBER
+ EXTENTS                                                                                                                    NUMBER
+ RSSIZE                                                                                                                     NUMBER
+ WRITES                                                                                                                     NUMBER
+ XACTS                                                                                                                      NUMBER
+ GETS                                                                                                                       NUMBER
+ WAITS                                                                                                                      NUMBER
+ OPTSIZE                                                                                                                    NUMBER
+ HWMSIZE                                                                                                                    NUMBER
+ SHRINKS                                                                                                                    NUMBER
+ WRAPS                                                                                                                      NUMBER
+ EXTENDS                                                                                                                    NUMBER
+ AVESHRINK                                                                                                                  NUMBER
+ AVEACTIVE                                                                                                                  NUMBER
+ STATUS                                                                                                                     VARCHAR2(15)
+ CUREXT                                                                                                                     NUMBER
+ CURBLK                                                                                                                     NUMBER
+ CON_ID                                                                                                                     NUMBER
+
+SQL> column rssize format a30
+SQL> select usn, rssize, extents, status from v$rollstat;
+
+       USN     RSSIZE    EXTENTS STATUS                                                                                                                                                                 
+---------- ---------- ---------- ---------------                                                                                                                                                        
+         0 ##########          7 ONLINE                                                                                                                                                                 
+         1 ##########          5 ONLINE                                                                                                                                                                 
+         2 ##########          3 ONLINE                                                                                                                                                                 
+         3 ##########          8 ONLINE                                                                                                                                                                 
+         4 ##########          3 ONLINE                                                                                                                                                                 
+         5 ##########          3 ONLINE                                                                                                                                                                 
+         6 ##########          4 ONLINE                                                                                                                                                                 
+         7 ##########          3 ONLINE                                                                                                                                                                 
+         8 ##########          4 ONLINE                                                                                                                                                                 
+         9 ##########          4 ONLINE                                                                                                                                                                 
+        10 ##########          7 ONLINE                                                                                                                                                                 
+
+11 rows selected.
+
+SQL> desc v$session
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ SADDR                                                                                                                      RAW(8)
+ SID                                                                                                                        NUMBER
+ SERIAL#                                                                                                                    NUMBER
+ AUDSID                                                                                                                     NUMBER
+ PADDR                                                                                                                      RAW(8)
+ USER#                                                                                                                      NUMBER
+ USERNAME                                                                                                                   VARCHAR2(128)
+ COMMAND                                                                                                                    NUMBER
+ OWNERID                                                                                                                    NUMBER
+ TADDR                                                                                                                      VARCHAR2(16)
+ LOCKWAIT                                                                                                                   VARCHAR2(16)
+ STATUS                                                                                                                     VARCHAR2(8)
+ SERVER                                                                                                                     VARCHAR2(9)
+ SCHEMA#                                                                                                                    NUMBER
+ SCHEMANAME                                                                                                                 VARCHAR2(128)
+ OSUSER                                                                                                                     VARCHAR2(128)
+ PROCESS                                                                                                                    VARCHAR2(24)
+ MACHINE                                                                                                                    VARCHAR2(64)
+ PORT                                                                                                                       NUMBER
+ TERMINAL                                                                                                                   VARCHAR2(16)
+ PROGRAM                                                                                                                    VARCHAR2(64)
+ TYPE                                                                                                                       VARCHAR2(10)
+ SQL_ADDRESS                                                                                                                RAW(8)
+ SQL_HASH_VALUE                                                                                                             NUMBER
+ SQL_ID                                                                                                                     VARCHAR2(13)
+ SQL_CHILD_NUMBER                                                                                                           NUMBER
+ SQL_EXEC_START                                                                                                             DATE
+ SQL_EXEC_ID                                                                                                                NUMBER
+ PREV_SQL_ADDR                                                                                                              RAW(8)
+ PREV_HASH_VALUE                                                                                                            NUMBER
+ PREV_SQL_ID                                                                                                                VARCHAR2(13)
+ PREV_CHILD_NUMBER                                                                                                          NUMBER
+ PREV_EXEC_START                                                                                                            DATE
+ PREV_EXEC_ID                                                                                                               NUMBER
+ PLSQL_ENTRY_OBJECT_ID                                                                                                      NUMBER
+ PLSQL_ENTRY_SUBPROGRAM_ID                                                                                                  NUMBER
+ PLSQL_OBJECT_ID                                                                                                            NUMBER
+ PLSQL_SUBPROGRAM_ID                                                                                                        NUMBER
+ MODULE                                                                                                                     VARCHAR2(64)
+ MODULE_HASH                                                                                                                NUMBER
+ ACTION                                                                                                                     VARCHAR2(64)
+ ACTION_HASH                                                                                                                NUMBER
+ CLIENT_INFO                                                                                                                VARCHAR2(64)
+ FIXED_TABLE_SEQUENCE                                                                                                       NUMBER
+ ROW_WAIT_OBJ#                                                                                                              NUMBER
+ ROW_WAIT_FILE#                                                                                                             NUMBER
+ ROW_WAIT_BLOCK#                                                                                                            NUMBER
+ ROW_WAIT_ROW#                                                                                                              NUMBER
+ TOP_LEVEL_CALL#                                                                                                            NUMBER
+ LOGON_TIME                                                                                                                 DATE
+ LAST_CALL_ET                                                                                                               NUMBER
+ PDML_ENABLED                                                                                                               VARCHAR2(3)
+ FAILOVER_TYPE                                                                                                              VARCHAR2(13)
+ FAILOVER_METHOD                                                                                                            VARCHAR2(10)
+ FAILED_OVER                                                                                                                VARCHAR2(3)
+ RESOURCE_CONSUMER_GROUP                                                                                                    VARCHAR2(32)
+ PDML_STATUS                                                                                                                VARCHAR2(8)
+ PDDL_STATUS                                                                                                                VARCHAR2(8)
+ PQ_STATUS                                                                                                                  VARCHAR2(8)
+ CURRENT_QUEUE_DURATION                                                                                                     NUMBER
+ CLIENT_IDENTIFIER                                                                                                          VARCHAR2(64)
+ BLOCKING_SESSION_STATUS                                                                                                    VARCHAR2(11)
+ BLOCKING_INSTANCE                                                                                                          NUMBER
+ BLOCKING_SESSION                                                                                                           NUMBER
+ FINAL_BLOCKING_SESSION_STATUS                                                                                              VARCHAR2(11)
+ FINAL_BLOCKING_INSTANCE                                                                                                    NUMBER
+ FINAL_BLOCKING_SESSION                                                                                                     NUMBER
+ SEQ#                                                                                                                       NUMBER
+ EVENT#                                                                                                                     NUMBER
+ EVENT                                                                                                                      VARCHAR2(64)
+ P1TEXT                                                                                                                     VARCHAR2(64)
+ P1                                                                                                                         NUMBER
+ P1RAW                                                                                                                      RAW(8)
+ P2TEXT                                                                                                                     VARCHAR2(64)
+ P2                                                                                                                         NUMBER
+ P2RAW                                                                                                                      RAW(8)
+ P3TEXT                                                                                                                     VARCHAR2(64)
+ P3                                                                                                                         NUMBER
+ P3RAW                                                                                                                      RAW(8)
+ WAIT_CLASS_ID                                                                                                              NUMBER
+ WAIT_CLASS#                                                                                                                NUMBER
+ WAIT_CLASS                                                                                                                 VARCHAR2(64)
+ WAIT_TIME                                                                                                                  NUMBER
+ SECONDS_IN_WAIT                                                                                                            NUMBER
+ STATE                                                                                                                      VARCHAR2(19)
+ WAIT_TIME_MICRO                                                                                                            NUMBER
+ TIME_REMAINING_MICRO                                                                                                       NUMBER
+ TIME_SINCE_LAST_WAIT_MICRO                                                                                                 NUMBER
+ SERVICE_NAME                                                                                                               VARCHAR2(64)
+ SQL_TRACE                                                                                                                  VARCHAR2(8)
+ SQL_TRACE_WAITS                                                                                                            VARCHAR2(5)
+ SQL_TRACE_BINDS                                                                                                            VARCHAR2(5)
+ SQL_TRACE_PLAN_STATS                                                                                                       VARCHAR2(10)
+ SESSION_EDITION_ID                                                                                                         NUMBER
+ CREATOR_ADDR                                                                                                               RAW(8)
+ CREATOR_SERIAL#                                                                                                            NUMBER
+ ECID                                                                                                                       VARCHAR2(64)
+ SQL_TRANSLATION_PROFILE_ID                                                                                                 NUMBER
+ PGA_TUNABLE_MEM                                                                                                            NUMBER
+ SHARD_DDL_STATUS                                                                                                           VARCHAR2(8)
+ CON_ID                                                                                                                     NUMBER
+ EXTERNAL_NAME                                                                                                              VARCHAR2(1024)
+ PLSQL_DEBUGGER_CONNECTED                                                                                                   VARCHAR2(5)
+
+SQL> column username format a30
+SQL> column saddr format a30
+SQL> column service_name format a30
+SQL> select username, sid, saddr, service_name from v$session;
+
+USERNAME                              SID SADDR                          SERVICE_NAME                                                                                                                   
+------------------------------ ---------- ------------------------------ ------------------------------                                                                                                 
+                                        1 00007FF905B34710               SYS$BACKGROUND                                                                                                                 
+                                        2 00007FF905B36EF8               SYS$BACKGROUND                                                                                                                 
+                                        3 00007FF905B396E0               SYS$BACKGROUND                                                                                                                 
+                                      123 00007FF905C64F70               SYS$BACKGROUND                                                                                                                 
+                                      124 00007FF905C67758               SYS$BACKGROUND                                                                                                                 
+                                      125 00007FF905C69F40               SYS$BACKGROUND                                                                                                                 
+                                      127 00007FF905C6EF10               SYS$BACKGROUND                                                                                                                 
+                                      245 00007FF905D957D0               SYS$BACKGROUND                                                                                                                 
+                                      246 00007FF905D97FB8               SYS$BACKGROUND                                                                                                                 
+                                      247 00007FF905D9A7A0               SYS$BACKGROUND                                                                                                                 
+                                      249 00007FF905D9F770               SYS$BACKGROUND                                                                                                                 
+                                      250 00007FF905DA1F58               SYS$BACKGROUND                                                                                                                 
+                                      252 00007FF905DA6F28               SYS$BACKGROUND                                                                                                                 
+                                      367 00007FF9040CD028               SYS$BACKGROUND                                                                                                                 
+                                      368 00007FF9040CF810               SYS$BACKGROUND                                                                                                                 
+                                      369 00007FF9040D1FF8               SYS$BACKGROUND                                                                                                                 
+                                      371 00007FF9040D6FC8               SYS$BACKGROUND                                                                                                                 
+                                      372 00007FF9040D97B0               SYS$BACKGROUND                                                                                                                 
+                                      489 00007FF9041FD888               SYS$BACKGROUND                                                                                                                 
+                                      490 00007FF904200070               SYS$BACKGROUND                                                                                                                 
+                                      491 00007FF904202858               SYS$BACKGROUND                                                                                                                 
+                                      492 00007FF904205040               SYS$BACKGROUND                                                                                                                 
+                                      494 00007FF90420A010               SYS$BACKGROUND                                                                                                                 
+                                      611 00007FF90432E0E8               SYS$BACKGROUND                                                                                                                 
+                                      612 00007FF9043308D0               SYS$BACKGROUND                                                                                                                 
+                                      613 00007FF9043330B8               SYS$BACKGROUND                                                                                                                 
+                                      615 00007FF904338088               SYS$BACKGROUND                                                                                                                 
+                                      733 00007FF90445E948               SYS$BACKGROUND                                                                                                                 
+                                      734 00007FF904461130               SYS$BACKGROUND                                                                                                                 
+                                      735 00007FF904463918               SYS$BACKGROUND                                                                                                                 
+                                      737 00007FF9044688E8               SYS$BACKGROUND                                                                                                                 
+                                      855 00007FF90458F1A8               SYS$BACKGROUND                                                                                                                 
+                                      856 00007FF904591990               SYS$BACKGROUND                                                                                                                 
+                                      857 00007FF904594178               SYS$BACKGROUND                                                                                                                 
+                                      859 00007FF904599148               SYS$BACKGROUND                                                                                                                 
+                                      977 00007FF9046BFA08               SYS$BACKGROUND                                                                                                                 
+                                      978 00007FF9046C21F0               SYS$BACKGROUND                                                                                                                 
+                                     1099 00007FF9047F0268               SYS$BACKGROUND                                                                                                                 
+                                     1100 00007FF9047F2A50               SYS$BACKGROUND                                                                                                                 
+                                     1105 00007FF9047FF1D8               SYS$BACKGROUND                                                                                                                 
+                                     1221 00007FF904920AC8               SYS$BACKGROUND                                                                                                                 
+                                     1222 00007FF9049232B0               SYS$BACKGROUND                                                                                                                 
+                                     1224 00007FF904928280               SYS$BACKGROUND                                                                                                                 
+                                     1226 00007FF90492D250               SYS$BACKGROUND                                                                                                                 
+                                     1343 00007FF904A51328               SYS$BACKGROUND                                                                                                                 
+                                     1344 00007FF904A53B10               SYS$BACKGROUND                                                                                                                 
+                                     1345 00007FF904A562F8               SYS$BACKGROUND                                                                                                                 
+                                     1465 00007FF904B81B88               SYS$BACKGROUND                                                                                                                 
+                                     1466 00007FF904B84370               SYS$BACKGROUND                                                                                                                 
+ABD1                                 1468 00007FF904B89340               SYS$USERS                                                                                                                      
+                                     1471 00007FF904B90AF8               SYS$BACKGROUND                                                                                                                 
+                                     1587 00007FF904CB23E8               SYS$BACKGROUND                                                                                                                 
+                                     1588 00007FF904CB4BD0               SYS$BACKGROUND                                                                                                                 
+                                     1590 00007FF904CB9BA0               SYS$BACKGROUND                                                                                                                 
+                                     1592 00007FF904CBEB70               SYS$BACKGROUND                                                                                                                 
+                                     1709 00007FF904DE2C48               SYS$BACKGROUND                                                                                                                 
+                                     1710 00007FF904DE5430               SYS$BACKGROUND                                                                                                                 
+                                     1712 00007FF904DEA400               SYS$BACKGROUND                                                                                                                 
+                                     1714 00007FF904DEF3D0               SYS$BACKGROUND                                                                                                                 
+                                     1831 00007FF903200028               SYS$BACKGROUND                                                                                                                 
+                                     1832 00007FF903202810               SYS$BACKGROUND                                                                                                                 
+                                     1835 00007FF903209FC8               SYS$BACKGROUND                                                                                                                 
+
+62 rows selected.
+
+SQL> desc v$transaction
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ ADDR                                                                                                                       RAW(8)
+ XIDUSN                                                                                                                     NUMBER
+ XIDSLOT                                                                                                                    NUMBER
+ XIDSQN                                                                                                                     NUMBER
+ UBAFIL                                                                                                                     NUMBER
+ UBABLK                                                                                                                     NUMBER
+ UBASQN                                                                                                                     NUMBER
+ UBAREC                                                                                                                     NUMBER
+ STATUS                                                                                                                     VARCHAR2(16)
+ START_TIME                                                                                                                 VARCHAR2(20)
+ START_SCNB                                                                                                                 NUMBER
+ START_SCNW                                                                                                                 NUMBER
+ START_UEXT                                                                                                                 NUMBER
+ START_UBAFIL                                                                                                               NUMBER
+ START_UBABLK                                                                                                               NUMBER
+ START_UBASQN                                                                                                               NUMBER
+ START_UBAREC                                                                                                               NUMBER
+ SES_ADDR                                                                                                                   RAW(8)
+ FLAG                                                                                                                       NUMBER
+ SPACE                                                                                                                      VARCHAR2(3)
+ RECURSIVE                                                                                                                  VARCHAR2(3)
+ NOUNDO                                                                                                                     VARCHAR2(3)
+ PTX                                                                                                                        VARCHAR2(3)
+ NAME                                                                                                                       VARCHAR2(256)
+ PRV_XIDUSN                                                                                                                 NUMBER
+ PRV_XIDSLT                                                                                                                 NUMBER
+ PRV_XIDSQN                                                                                                                 NUMBER
+ PTX_XIDUSN                                                                                                                 NUMBER
+ PTX_XIDSLT                                                                                                                 NUMBER
+ PTX_XIDSQN                                                                                                                 NUMBER
+ DSCN-B                                                                                                                     NUMBER
+ DSCN-W                                                                                                                     NUMBER
+ USED_UBLK                                                                                                                  NUMBER
+ USED_UREC                                                                                                                  NUMBER
+ LOG_IO                                                                                                                     NUMBER
+ PHY_IO                                                                                                                     NUMBER
+ CR_GET                                                                                                                     NUMBER
+ CR_CHANGE                                                                                                                  NUMBER
+ START_DATE                                                                                                                 DATE
+ DSCN_BASE                                                                                                                  NUMBER
+ DSCN_WRAP                                                                                                                  NUMBER
+ START_SCN                                                                                                                  NUMBER
+ DEPENDENT_SCN                                                                                                              NUMBER
+ XID                                                                                                                        RAW(8)
+ PRV_XID                                                                                                                    RAW(8)
+ PTX_XID                                                                                                                    RAW(8)
+ CON_ID                                                                                                                     NUMBER
+
+SQL> insert into emp values (999, 'TEST','TRANZACT',1111,sysdate, 100,0,10)
+  2  select addr, xidusn, used_ublk,start_uext, start_ubafil from v$transaction;
+select addr, xidusn, used_ublk,start_uext, start_ubafil from v$transaction
+*
+ERROR at line 2:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> insert into emp values (999, 'TEST','TRANZACT',1111,sysdate, 100,0,10);
+insert into emp values (999, 'TEST','TRANZACT',1111,sysdate, 100,0,10)
+*
+ERROR at line 1:
+ORA-00001: unique constraint (ABD1.PK_EMP) violated 
+
+
+SQL> select addr, xidusn, used_ublk,start_uext, start_ubafil from v$transaction;
+
+no rows selected
+
+SQL> select * from emp;
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                   
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------                                                                                                                   
+       999 TEST       TRANZACT        1111 17-NOV-21        100          0         10                                                                                                                   
+      7369 SMITH      CLERK           7902 17-DEC-80        800                    20                                                                                                                   
+      7499 ALLEN      SALESMAN        7698 20-FEB-81       1600        300         30                                                                                                                   
+      7521 WARD       SALESMAN        7698 22-FEB-81       1250        500         30                                                                                                                   
+      7566 JONES      MANAGER         7839 02-APR-81       2975                    20                                                                                                                   
+      7654 MARTIN     SALESMAN        7698 28-SEP-81       1250       1400         30                                                                                                                   
+      7698 BLAKE      MANAGER         7839 01-MAY-81       2850                    30                                                                                                                   
+      7782 CLARK      MANAGER         7839 09-JUN-81       2450                    10                                                                                                                   
+      7788 SCOTT      ANALYST         7566 19-APR-87       3000                    20                                                                                                                   
+      7839 KING       PRESIDENT            17-NOV-81       5000                    10                                                                                                                   
+      7844 TURNER     SALESMAN        7698 08-SEP-81       1500          0         30                                                                                                                   
+      7876 ADAMS      CLERK           7788 23-MAY-87       1100                    20                                                                                                                   
+      7900 JAMES      CLERK           7698 03-DEC-81        950                    30                                                                                                                   
+      7902 FORD       ANALYST         7566 03-DEC-81       3000                    20                                                                                                                   
+      7934 MILLER     CLERK           7782 23-JAN-82       1300                    10                                                                                                                   
+
+15 rows selected.
+
+SQL> select * from v$transaction;
+
+no rows selected
+
+SQL> SELECT
+  2      s.username,
+  3      t.xidusn,
+  4      t.ubafil,
+  5      t.ubablk,
+  6      t.used_ublk
+  7  FROM
+  8      v$session s,
+  9      v$transaction t
+ 10  WHERE
+ 11      s.saddr = t.ses_addr;
+
+no rows selected
+
+SQL> select * from v$transaction;
+
+no rows selected
+
+SQL> select * from v$transaction;
+
+no rows selected
+
+SQL> insert into emp values (999, 'TEST1','TRANZACT',1111,sysdate, 100,0,10);
+insert into emp values (999, 'TEST1','TRANZACT',1111,sysdate, 100,0,10)
+*
+ERROR at line 1:
+ORA-00001: unique constraint (ABD1.PK_EMP) violated 
+
+
+SQL> insert into emp values (99999, 'TEST1','TRANZACT',1111,sysdate, 100,0,10);
+insert into emp values (99999, 'TEST1','TRANZACT',1111,sysdate, 100,0,10)
+                        *
+ERROR at line 1:
+ORA-01438: value larger than specified precision allowed for this column 
+
+
+SQL> insert into emp values (9999, 'TEST1','TRANZACT',1111,sysdate, 100,0,10);
+
+1 row created.
+
+SQL> select * from v$transaction;
+
+ADDR                 XIDUSN    XIDSLOT     XIDSQN     UBAFIL     UBABLK     UBASQN     UBAREC STATUS           START_TIME           START_SCNB START_SCNW START_UEXT START_UBAFIL START_UBABLK          
+---------------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------------- -------------------- ---------- ---------- ---------- ------------ ------------          
+START_UBASQN START_UBAREC SES_ADDR               FLAG SPA REC NOU PTX                                                                                                                                   
+------------ ------------ ---------------- ---------- --- --- --- ---                                                                                                                                   
+NAME                                                                                                                                                                                                    
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+PRV_XIDUSN PRV_XIDSLT PRV_XIDSQN PTX_XIDUSN PTX_XIDSLT PTX_XIDSQN     DSCN-B     DSCN-W  USED_UBLK  USED_UREC     LOG_IO     PHY_IO     CR_GET  CR_CHANGE START_DAT  DSCN_BASE  DSCN_WRAP  START_SCN    
+---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- --------- ---------- ---------- ----------    
+DEPENDENT_SCN XID              PRV_XID          PTX_XID              CON_ID                                                                                                                             
+------------- ---------------- ---------------- ---------------- ----------                                                                                                                             
+00007FF8FAF87F78          9         13       1220          4       2064        260         20 ACTIVE           11/24/21 10:23:36       5312062          0          2            4         2064          
+         260           18 00007FF904B89340       3587 NO  NO  NO  NO                                                                                                                                    
+                                                                                                                                                                                                        
+         0          0          0          0          0          0          0          0          1          3          9          2          0          0 24-NOV-21          0          0    5312062    
+            0 09000D00C4040000 0000000000000000 0000000000000000          0                                                                                                                             
+                                                                                                                                                                                                        
+
+SQL> SELECT
+  2      s.username,
+  3      t.xidusn,
+  4      t.ubafil,
+  5      t.ubablk,
+  6      t.used_ublk
+  7  FROM
+  8      v$session s,
+  9      v$transaction t
+ 10  WHERE
+ 11      s.saddr = t.ses_addr;
+
+USERNAME                           XIDUSN     UBAFIL     UBABLK  USED_UBLK                                                                                                                              
+------------------------------ ---------- ---------- ---------- ----------                                                                                                                              
+ABD1                                    9          4       2064          1                                                                                                                              
+
+SQL> desc v$undostat
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ BEGIN_TIME                                                                                                                 DATE
+ END_TIME                                                                                                                   DATE
+ UNDOTSN                                                                                                                    NUMBER
+ UNDOBLKS                                                                                                                   NUMBER
+ TXNCOUNT                                                                                                                   NUMBER
+ MAXQUERYLEN                                                                                                                NUMBER
+ MAXQUERYID                                                                                                                 VARCHAR2(13)
+ MAXCONCURRENCY                                                                                                             NUMBER
+ UNXPSTEALCNT                                                                                                               NUMBER
+ UNXPBLKRELCNT                                                                                                              NUMBER
+ UNXPBLKREUCNT                                                                                                              NUMBER
+ EXPSTEALCNT                                                                                                                NUMBER
+ EXPBLKRELCNT                                                                                                               NUMBER
+ EXPBLKREUCNT                                                                                                               NUMBER
+ SSOLDERRCNT                                                                                                                NUMBER
+ NOSPACEERRCNT                                                                                                              NUMBER
+ ACTIVEBLKS                                                                                                                 NUMBER
+ UNEXPIREDBLKS                                                                                                              NUMBER
+ EXPIREDBLKS                                                                                                                NUMBER
+ TUNED_UNDORETENTION                                                                                                        NUMBER
+ CON_ID                                                                                                                     NUMBER
+
+SQL> SELECT to_char(begin_time, 'dd-mm-yyyy hh:mi:ss') start_time, to_char(end_time,'ddmm-yyyy hh:mi:ss') end_time, ((end_time-begin_time)* 24)*60 minute, undoblks FROM v$undostat;
+
+START_TIME          END_TIME               MINUTE   UNDOBLKS                                                                                                                                            
+------------------- ------------------ ---------- ----------                                                                                                                                            
+24-11-2021 10:24:50 2411-2021 10:25:26         .6          0                                                                                                                                            
+24-11-2021 10:14:50 2411-2021 10:24:50         10         13                                                                                                                                            
+24-11-2021 10:04:50 2411-2021 10:14:50         10          2                                                                                                                                            
+24-11-2021 09:54:50 2411-2021 10:04:50         10       1664                                                                                                                                            
+23-11-2021 10:24:50 2411-2021 09:54:50        690          0                                                                                                                                            
+23-11-2021 10:14:50 2311-2021 10:24:50         10          0                                                                                                                                            
+23-11-2021 10:04:50 2311-2021 10:14:50         10          9                                                                                                                                            
+23-11-2021 09:54:50 2311-2021 10:04:50         10        466                                                                                                                                            
+23-11-2021 09:44:50 2311-2021 09:54:50         10          1                                                                                                                                            
+23-11-2021 09:34:50 2311-2021 09:44:50         10         10                                                                                                                                            
+23-11-2021 09:24:50 2311-2021 09:34:50         10          0                                                                                                                                            
+23-11-2021 09:14:50 2311-2021 09:24:50         10       1144                                                                                                                                            
+23-11-2021 09:04:50 2311-2021 09:14:50         10          4                                                                                                                                            
+23-11-2021 08:54:50 2311-2021 09:04:50         10        196                                                                                                                                            
+23-11-2021 08:44:50 2311-2021 08:54:50         10          5                                                                                                                                            
+23-11-2021 08:34:50 2311-2021 08:44:50         10          3                                                                                                                                            
+23-11-2021 08:24:50 2311-2021 08:34:50         10          0                                                                                                                                            
+23-11-2021 08:14:50 2311-2021 08:24:50         10          1                                                                                                                                            
+23-11-2021 08:04:50 2311-2021 08:14:50         10          2                                                                                                                                            
+23-11-2021 07:54:50 2311-2021 08:04:50         10        189                                                                                                                                            
+23-11-2021 07:44:50 2311-2021 07:54:50         10          4                                                                                                                                            
+23-11-2021 07:34:50 2311-2021 07:44:50         10          3                                                                                                                                            
+23-11-2021 07:24:50 2311-2021 07:34:50         10          0                                                                                                                                            
+23-11-2021 07:14:50 2311-2021 07:24:50         10          0                                                                                                                                            
+23-11-2021 07:04:50 2311-2021 07:14:50         10          6                                                                                                                                            
+23-11-2021 06:54:50 2311-2021 07:04:50         10        188                                                                                                                                            
+23-11-2021 06:44:50 2311-2021 06:54:50         10          7                                                                                                                                            
+23-11-2021 06:34:50 2311-2021 06:44:50         10          7                                                                                                                                            
+23-11-2021 06:24:50 2311-2021 06:34:50         10          0                                                                                                                                            
+23-11-2021 06:14:50 2311-2021 06:24:50         10          1                                                                                                                                            
+23-11-2021 06:04:50 2311-2021 06:14:50         10          0                                                                                                                                            
+23-11-2021 05:54:50 2311-2021 06:04:50         10        203                                                                                                                                            
+23-11-2021 05:44:50 2311-2021 05:54:50         10          3                                                                                                                                            
+23-11-2021 05:34:50 2311-2021 05:44:50         10          5                                                                                                                                            
+23-11-2021 05:24:50 2311-2021 05:34:50         10          1                                                                                                                                            
+23-11-2021 05:14:50 2311-2021 05:24:50         10          0                                                                                                                                            
+23-11-2021 05:04:50 2311-2021 05:14:50         10          1                                                                                                                                            
+23-11-2021 04:54:50 2311-2021 05:04:50         10        203                                                                                                                                            
+23-11-2021 04:44:50 2311-2021 04:54:50         10          3                                                                                                                                            
+23-11-2021 04:34:50 2311-2021 04:44:50         10          7                                                                                                                                            
+23-11-2021 04:24:50 2311-2021 04:34:50         10          0                                                                                                                                            
+23-11-2021 04:14:50 2311-2021 04:24:50         10          1                                                                                                                                            
+23-11-2021 04:04:50 2311-2021 04:14:50         10          1                                                                                                                                            
+23-11-2021 03:54:50 2311-2021 04:04:50         10          0                                                                                                                                            
+23-11-2021 03:44:50 2311-2021 03:54:50         10          3                                                                                                                                            
+23-11-2021 03:34:50 2311-2021 03:44:50         10        172                                                                                                                                            
+23-11-2021 01:34:50 2311-2021 03:34:50        120          0                                                                                                                                            
+23-11-2021 01:24:50 2311-2021 01:34:50         10         44                                                                                                                                            
+
+48 rows selected.
+
+SQL> SELECT (SUM(undoblks) / SUM ((end_time - begin_time) * 24*60*60)) nr_med_blocuri_undo_sec FROM v$undostat;
+
+NR_MED_BLOCURI_UNDO_SEC                                                                                                                                                                                 
+-----------------------                                                                                                                                                                                 
+              .06028799                                                                                                                                                                                 
+
+SQL> alter rollback segment ubd shrink to 4M;
+
+Rollback segment altered.
+
+SQL> drop rollback segment ubd;
+
+Rollback segment dropped.
+
+SQL> desc v$sort_segment
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ TABLESPACE_NAME                                                                                                            VARCHAR2(30)
+ SEGMENT_FILE                                                                                                               NUMBER
+ SEGMENT_BLOCK                                                                                                              NUMBER
+ EXTENT_SIZE                                                                                                                NUMBER
+ CURRENT_USERS                                                                                                              NUMBER
+ TOTAL_EXTENTS                                                                                                              NUMBER
+ TOTAL_BLOCKS                                                                                                               NUMBER
+ USED_EXTENTS                                                                                                               NUMBER
+ USED_BLOCKS                                                                                                                NUMBER
+ FREE_EXTENTS                                                                                                               NUMBER
+ FREE_BLOCKS                                                                                                                NUMBER
+ ADDED_EXTENTS                                                                                                              NUMBER
+ EXTENT_HITS                                                                                                                NUMBER
+ FREED_EXTENTS                                                                                                              NUMBER
+ FREE_REQUESTS                                                                                                              NUMBER
+ MAX_SIZE                                                                                                                   NUMBER
+ MAX_BLOCKS                                                                                                                 NUMBER
+ MAX_USED_SIZE                                                                                                              NUMBER
+ MAX_USED_BLOCKS                                                                                                            NUMBER
+ MAX_SORT_SIZE                                                                                                              NUMBER
+ MAX_SORT_BLOCKS                                                                                                            NUMBER
+ RELATIVE_FNO                                                                                                               NUMBER
+ TS#                                                                                                                        NUMBER
+ CON_ID                                                                                                                     NUMBER
+ IS_LOCAL_TEMP                                                                                                              NUMBER
+
+SQL> select tablespace_name,max_sort_size,extent_size,max_sort_blocks from v$sort_segment;
+
+TABLESPACE_NAME                MAX_SORT_SIZE EXTENT_SIZE MAX_SORT_BLOCKS                                                                                                                                
+------------------------------ ------------- ----------- ---------------                                                                                                                                
+UBD_TEMP2                                  0         256               0                                                                                                                                
+
+SQL> desc v$tempseg_usage ( v$sort_usage)
+Usage: DESCRIBE [schema.]object[@db_link]
+SQL> desc v$tempseg_usage
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ USERNAME                                                                                                                   VARCHAR2(128)
+ USER                                                                                                                       VARCHAR2(128)
+ SESSION_ADDR                                                                                                               RAW(8)
+ SESSION_NUM                                                                                                                NUMBER
+ SQLADDR                                                                                                                    RAW(8)
+ SQLHASH                                                                                                                    NUMBER
+ SQL_ID                                                                                                                     VARCHAR2(13)
+ TABLESPACE                                                                                                                 VARCHAR2(30)
+ CONTENTS                                                                                                                   VARCHAR2(9)
+ SEGTYPE                                                                                                                    VARCHAR2(9)
+ SEGFILE#                                                                                                                   NUMBER
+ SEGBLK#                                                                                                                    NUMBER
+ EXTENTS                                                                                                                    NUMBER
+ BLOCKS                                                                                                                     NUMBER
+ SEGRFNO#                                                                                                                   NUMBER
+ TS#                                                                                                                        NUMBER
+ CON_ID                                                                                                                     NUMBER
+ SQL_ID_TEMPSEG                                                                                                             VARCHAR2(13)
+
+SQL> select username,user,tablespace,contents,extents,blocks from v$tempseg_usage;
+
+no rows selected
+
+SQL> alter system set sort_area_size=10240 deferred;
+
+System altered.
+
+SQL> --exercitii individuale
+SQL> -- 1. Sa se faca o lista cu numele, marimea in bytes si
+SQL> -- starea segmentelor de undo din sesiunea curenta
+SQL> select
+  2      a.name,
+  3      b.rssize,
+  4      b.status
+  5  from
+  6      v$rollname a,
+  7      v$rollstat b
+  8  where
+  9      a.usn = b.usn;
+
+NAME                               RSSIZE STATUS                                                                                                                                                        
+------------------------------ ---------- ---------------                                                                                                                                               
+SYSTEM                         ########## ONLINE                                                                                                                                                        
+_SYSSMU1_3741171459$           ########## ONLINE                                                                                                                                                        
+_SYSSMU2_1557575246$           ########## ONLINE                                                                                                                                                        
+_SYSSMU3_3193270435$           ########## ONLINE                                                                                                                                                        
+_SYSSMU4_2372004640$           ########## ONLINE                                                                                                                                                        
+_SYSSMU5_553218552$            ########## ONLINE                                                                                                                                                        
+_SYSSMU6_3809612316$           ########## ONLINE                                                                                                                                                        
+_SYSSMU7_3306078869$           ########## ONLINE                                                                                                                                                        
+_SYSSMU8_115127830$            ########## ONLINE                                                                                                                                                        
+_SYSSMU9_4165470211$           ########## ONLINE                                                                                                                                                        
+_SYSSMU10_3563521556$          ########## ONLINE                                                                                                                                                        
+
+11 rows selected.
+
+SQL> select segment_name,tablespace_name,owner,status from dba_rollback_segs;
+
+SEGMENT_NAME                   TABLESPACE_NAME                OWNER  STATUS                                                                                                                             
+------------------------------ ------------------------------ ------ ----------------                                                                                                                   
+SYSTEM                         SYSTEM                         SYS    ONLINE                                                                                                                             
+_SYSSMU1_3741171459$           UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU2_1557575246$           UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU3_3193270435$           UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU4_2372004640$           UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU5_553218552$            UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU6_3809612316$           UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU7_3306078869$           UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU8_115127830$            UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU9_4165470211$           UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU10_3563521556$          UNDOTBS1                       PUBLIC ONLINE                                                                                                                             
+_SYSSMU11_3803933068$          BD_UNDO                        PUBLIC OFFLINE                                                                                                                            
+_SYSSMU12_923534793$           BD_UNDO                        PUBLIC OFFLINE                                                                                                                            
+_SYSSMU13_133832675$           BD_UNDO                        PUBLIC OFFLINE                                                                                                                            
+_SYSSMU14_1079045149$          BD_UNDO                        PUBLIC OFFLINE                                                                                                                            
+_SYSSMU15_780013251$           BD_UNDO                        PUBLIC OFFLINE                                                                                                                            
+_SYSSMU16_3728680523$          BD_UNDO                        PUBLIC OFFLINE                                                                                                                            
+_SYSSMU17_1833252171$          BD_UNDO                        PUBLIC OFFLINE                                                                                                                            
+_SYSSMU18_2442432176$          BD_UNDO                        PUBLIC OFFLINE                                                                                                                            
+
+19 rows selected.
+
+SQL> desc v$rollstat
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ USN                                                                                                                        NUMBER
+ LATCH                                                                                                                      NUMBER
+ EXTENTS                                                                                                                    NUMBER
+ RSSIZE                                                                                                                     NUMBER
+ WRITES                                                                                                                     NUMBER
+ XACTS                                                                                                                      NUMBER
+ GETS                                                                                                                       NUMBER
+ WAITS                                                                                                                      NUMBER
+ OPTSIZE                                                                                                                    NUMBER
+ HWMSIZE                                                                                                                    NUMBER
+ SHRINKS                                                                                                                    NUMBER
+ WRAPS                                                                                                                      NUMBER
+ EXTENDS                                                                                                                    NUMBER
+ AVESHRINK                                                                                                                  NUMBER
+ AVEACTIVE                                                                                                                  NUMBER
+ STATUS                                                                                                                     VARCHAR2(15)
+ CUREXT                                                                                                                     NUMBER
+ CURBLK                                                                                                                     NUMBER
+ CON_ID                                                                                                                     NUMBER
+
+SQL> select
+  2      a.name,
+  3      b.rssize,
+  4      b.status
+  5  from
+  6      v$rollname a,
+  7      v$rollstat b
+  8  where
+  9      a.usn = b.usn AND b.status = 'ONLINE';
+
+NAME                               RSSIZE STATUS                                                                                                                                                        
+------------------------------ ---------- ---------------                                                                                                                                               
+SYSTEM                         ########## ONLINE                                                                                                                                                        
+_SYSSMU1_3741171459$           ########## ONLINE                                                                                                                                                        
+_SYSSMU2_1557575246$           ########## ONLINE                                                                                                                                                        
+_SYSSMU3_3193270435$           ########## ONLINE                                                                                                                                                        
+_SYSSMU4_2372004640$           ########## ONLINE                                                                                                                                                        
+_SYSSMU5_553218552$            ########## ONLINE                                                                                                                                                        
+_SYSSMU6_3809612316$           ########## ONLINE                                                                                                                                                        
+_SYSSMU7_3306078869$           ########## ONLINE                                                                                                                                                        
+_SYSSMU8_115127830$            ########## ONLINE                                                                                                                                                        
+_SYSSMU9_4165470211$           ########## ONLINE                                                                                                                                                        
+_SYSSMU10_3563521556$          ########## ONLINE                                                                                                                                                        
+
+11 rows selected.
+
+SQL> select
+  2      a.name,
+  3      b.extents,
+  4      b.rssize,
+  5      b.status
+  6  from
+  7      v$rollname a,
+  8      v$rollstat b
+  9  where
+ 10      a.usn = b.usn AND b.status = 'ONLINE';
+
+NAME                              EXTENTS     RSSIZE STATUS                                                                                                                                             
+------------------------------ ---------- ---------- ---------------                                                                                                                                    
+SYSTEM                                  7 ########## ONLINE                                                                                                                                             
+_SYSSMU1_3741171459$                    5 ########## ONLINE                                                                                                                                             
+_SYSSMU2_1557575246$                    3 ########## ONLINE                                                                                                                                             
+_SYSSMU3_3193270435$                    8 ########## ONLINE                                                                                                                                             
+_SYSSMU4_2372004640$                    3 ########## ONLINE                                                                                                                                             
+_SYSSMU5_553218552$                     3 ########## ONLINE                                                                                                                                             
+_SYSSMU6_3809612316$                    4 ########## ONLINE                                                                                                                                             
+_SYSSMU7_3306078869$                    3 ########## ONLINE                                                                                                                                             
+_SYSSMU8_115127830$                     4 ########## ONLINE                                                                                                                                             
+_SYSSMU9_4165470211$                    4 ########## ONLINE                                                                                                                                             
+_SYSSMU10_3563521556$                   5 ########## ONLINE                                                                                                                                             
+
+11 rows selected.
+
+SQL> 
+SQL> desc v$tablespace
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ TS#                                                                                                                        NUMBER
+ NAME                                                                                                                       VARCHAR2(30)
+ INCLUDED_IN_DATABASE_BACKUP                                                                                                VARCHAR2(3)
+ BIGFILE                                                                                                                    VARCHAR2(3)
+ FLASHBACK_ON                                                                                                               VARCHAR2(3)
+ ENCRYPT_IN_BACKUP                                                                                                          VARCHAR2(3)
+ CON_ID                                                                                                                     NUMBER
+
+SQL> desc dba_tablespaces
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ TABLESPACE_NAME                                                                                                   NOT NULL VARCHAR2(30)
+ BLOCK_SIZE                                                                                                        NOT NULL NUMBER
+ INITIAL_EXTENT                                                                                                             NUMBER
+ NEXT_EXTENT                                                                                                                NUMBER
+ MIN_EXTENTS                                                                                                       NOT NULL NUMBER
+ MAX_EXTENTS                                                                                                                NUMBER
+ MAX_SIZE                                                                                                                   NUMBER
+ PCT_INCREASE                                                                                                               NUMBER
+ MIN_EXTLEN                                                                                                                 NUMBER
+ STATUS                                                                                                                     VARCHAR2(9)
+ CONTENTS                                                                                                                   VARCHAR2(21)
+ LOGGING                                                                                                                    VARCHAR2(9)
+ FORCE_LOGGING                                                                                                              VARCHAR2(3)
+ EXTENT_MANAGEMENT                                                                                                          VARCHAR2(10)
+ ALLOCATION_TYPE                                                                                                            VARCHAR2(9)
+ PLUGGED_IN                                                                                                                 VARCHAR2(3)
+ SEGMENT_SPACE_MANAGEMENT                                                                                                   VARCHAR2(6)
+ DEF_TAB_COMPRESSION                                                                                                        VARCHAR2(8)
+ RETENTION                                                                                                                  VARCHAR2(11)
+ BIGFILE                                                                                                                    VARCHAR2(3)
+ PREDICATE_EVALUATION                                                                                                       VARCHAR2(7)
+ ENCRYPTED                                                                                                                  VARCHAR2(3)
+ COMPRESS_FOR                                                                                                               VARCHAR2(30)
+ DEF_INMEMORY                                                                                                               VARCHAR2(8)
+ DEF_INMEMORY_PRIORITY                                                                                                      VARCHAR2(8)
+ DEF_INMEMORY_DISTRIBUTE                                                                                                    VARCHAR2(15)
+ DEF_INMEMORY_COMPRESSION                                                                                                   VARCHAR2(17)
+ DEF_INMEMORY_DUPLICATE                                                                                                     VARCHAR2(13)
+ SHARED                                                                                                                     VARCHAR2(13)
+ DEF_INDEX_COMPRESSION                                                                                                      VARCHAR2(8)
+ INDEX_COMPRESS_FOR                                                                                                         VARCHAR2(13)
+ DEF_CELLMEMORY                                                                                                             VARCHAR2(14)
+ DEF_INMEMORY_SERVICE                                                                                                       VARCHAR2(12)
+ DEF_INMEMORY_SERVICE_NAME                                                                                                  VARCHAR2(1000)
+ LOST_WRITE_PROTECT                                                                                                         VARCHAR2(7)
+ CHUNK_TABLESPACE                                                                                                           VARCHAR2(1)
+
+SQL> select
+  2      a.tablespace_name,
+  3      b.status,
+  4      b.contents,
+  5      a.max_sort_blocks
+  6  from
+  7      v$sort_segment a,
+  8      dba_tablespaces b
+  9  where
+ 10      a.tablespace_name = b.tablespace_name;
+
+TABLESPACE_NAME                STATUS    CONTENTS              MAX_SORT_BLOCKS                                                                                                                          
+------------------------------ --------- --------------------- ---------------                                                                                                                          
+UBD_TEMP2                      ONLINE    TEMPORARY                           0                                                                                                                          
+
+SQL> select
+  2      a.tablespace_name,
+  3      b.status,
+  4      b.contents,
+  5      a.max_sort_blocks
+  6  from
+  7      v$sort_segment a,
+  8      dba_tablespaces b
+  9  where
+ 10      a.tablespace_name = b.tablespace_name;
+
+TABLESPACE_NAME                STATUS    CONTENTS              MAX_SORT_BLOCKS                                                                                                                          
+------------------------------ --------- --------------------- ---------------                                                                                                                          
+UBD_TEMP2                      ONLINE    TEMPORARY                           0                                                                                                                          
+
+SQL> -- 1. Sa se faca o lista cu numele, marimea in bytes si
+SQL> -- starea segmentelor ONLINE din sesiunea curenta
+SQL> select
+  2      a.name,
+  3      b.extents,
+  4      b.rssize,
+  5      b.status
+  6  from
+  7      v$rollname a,
+  8      v$rollstat b
+  9  where
+ 10      a.usn = b.usn AND b.status = 'ONLINE';
+
+NAME                              EXTENTS     RSSIZE STATUS                                                                                                                                             
+------------------------------ ---------- ---------- ---------------                                                                                                                                    
+SYSTEM                                  7 ########## ONLINE                                                                                                                                             
+_SYSSMU1_3741171459$                    5 ########## ONLINE                                                                                                                                             
+_SYSSMU2_1557575246$                    3 ########## ONLINE                                                                                                                                             
+_SYSSMU3_3193270435$                    8 ########## ONLINE                                                                                                                                             
+_SYSSMU4_2372004640$                    3 ########## ONLINE                                                                                                                                             
+_SYSSMU5_553218552$                     3 ########## ONLINE                                                                                                                                             
+_SYSSMU6_3809612316$                    4 ########## ONLINE                                                                                                                                             
+_SYSSMU7_3306078869$                    3 ########## ONLINE                                                                                                                                             
+_SYSSMU8_115127830$                     4 ########## ONLINE                                                                                                                                             
+_SYSSMU9_4165470211$                    4 ########## ONLINE                                                                                                                                             
+_SYSSMU10_3563521556$                   5 ########## ONLINE                                                                                                                                             
+
+11 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- 2. Sa se faca o lista cu numele, tipul si starea tablespace-ului folosit pentru
+SQL> -- segmentele temporare de sortare din sesiunea curenta, numarul maxim
+SQL> -- de blocuri de sortare alocate fiecarui segment temporar
+SQL> 
+SQL> select
+  2      a.tablespace_name,
+  3      b.status,
+  4      b.contents,
+  5      a.max_sort_blocks
+  6  from
+  7      v$sort_segment a,
+  8      dba_tablespaces b
+  9  where
+ 10      a.tablespace_name = b.tablespace_name;
+
+TABLESPACE_NAME                STATUS    CONTENTS              MAX_SORT_BLOCKS                                                                                                                          
+------------------------------ --------- --------------------- ---------------                                                                                                                          
+UBD_TEMP2                      ONLINE    TEMPORARY                           0                                                                                                                          
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> insert into dept values (50, 'TEST','BUCHAREST');
+
+1 row created.
+
+SQL> SELECT
+  2      s.username,
+  3      s.saddr,
+  4      s.taddr,
+  5      r.name,
+  6      t.xidusn,
+  7      t.ubafil,
+  8      t.ubablk,
+  9      t.used_ublk
+ 10  FROM
+ 11      v$session s,
+ 12      v$transaction t,
+ 13      v$rollname r
+ 14  WHERE
+ 15      s.saddr = t.ses_addr AND
+ 16      t.xidusn = r.usn;
+
+USERNAME                       SADDR                          TADDR            NAME                               XIDUSN     UBAFIL     UBABLK  USED_UBLK                                               
+------------------------------ ------------------------------ ---------------- ------------------------------ ---------- ---------- ---------- ----------                                               
+ABD1                           00007FF904B89340               00007FF8FAF87F78 _SYSSMU10_3563521556$                  10          4       1242          1                                               
+
+SQL> -- 3. Sa se faca o operatie de inserare in tabeta dept, apoi sa se faca o lista cu
+SQL> -- userul curent, adresa sesiunii, adresa tranzactiei, numele si numarul segmentului
+SQL> -- de rollback folosit in sesiunea curenta
+SQL> SELECT
+  2      s.username,
+  3      s.saddr,
+  4      s.taddr,
+  5      r.name,
+  6      t.xidusn,
+  7      t.ubafil,
+  8      t.ubablk,
+  9      t.used_ublk
+ 10  FROM
+ 11      v$session s,
+ 12      v$transaction t,
+ 13      v$rollname r
+ 14  WHERE
+ 15      s.saddr = t.ses_addr AND
+ 16      t.xidusn = r.usn;
+
+USERNAME                       SADDR                          TADDR            NAME                               XIDUSN     UBAFIL     UBABLK  USED_UBLK                                               
+------------------------------ ------------------------------ ---------------- ------------------------------ ---------- ---------- ---------- ----------                                               
+ABD1                           00007FF904B89340               00007FF8FAF87F78 _SYSSMU10_3563521556$                  10          4       1242          1                                               
+
+SQL> 
+SQL> 
+SQL> -- sfarsit de laborator
+SQL> 
+SQL> update login_lab_ubd set data_sf= sysdate where laborator='Lab8';
+
+1 row updated.
+
+SQL> update login_lab_ubd set durata= round((data_sf-data_in)*24*60) where laborator='Lab8';
+
+1 row updated.
+
+SQL> commit;
+
+Commit complete.
+
+SQL> select instance_number,instance_name, to_char(startup_time, 'dd-mm-yyyy hh:mi:ss'), host_name from v$instance;
+
+INSTANCE_NUMBER INSTANCE_NAME    TO_CHAR(STARTUP_TIM HOST_NAME                                                                                                                                          
+--------------- ---------------- ------------------- ----------------------------------------------------------------                                                                                   
+              1 orcl             23-11-2021 01:24:50 DESKTOP-04HOUK7                                                                                                                                    
+
+SQL> select nume_stud, grupa, laborator, to_char(data_in, 'dd-mm-yyyy hh:mi:ss') data_inceput,
+  2  to_char(data_sf, 'dd-mm-yyyy hh:mi:ss') data_sfarsit, durata minute_lucrate from login_lab_ubd;
+
+NUME_STUD                      GRUPA      LABORATOR  DATA_INCEPUT        DATA_SFARSIT        MINUTE_LUCRATE                                                                                             
+------------------------------ ---------- ---------- ------------------- ------------------- --------------                                                                                             
+Filimon Adrian                 342C2      Lab5       03-11-2021 10:08:31 03-11-2021 11:40:32             92                                                                                             
+Filimon Adrian                 342C2      Lab6       10-11-2021 08:41:22 10-11-2021 09:52:41             71                                                                                             
+Filimon Adrian                 342C2      Lab7       17-11-2021 12:15:38 17-11-2021 02:40:58            145                                                                                             
+Filimon Adrian                 342C2      Lab8       24-11-2021 10:08:17 24-11-2021 11:47:54            100                                                                                             
+Filimon Adrian                 342C2      Lab4       27-10-2021 07:24:44 27-10-2021 08:34:24             70                                                                                             
+Filimon Adrian                 342C2      Lab3       20-10-2021 10:14:01                                                                                                                                
+
+6 rows selected.
+
+SQL> 
+SQL> spool off;
